@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Mental Wellness Journal</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/style.css">   
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="entries.html">Add Entry</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            Welcome, <span id="userName">User</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="dashboard-overview">
+            <h2>Quick Overview</h2>
+            <div class="cards">
+                <div class="card">Total Entries: <span id="totalEntries">0</span></div>
+                <div class="card">Current Mood: <span id="currentMood">😊</span></div>
+                <div class="card">Goals Progress: <span id="goalsProgress">0%</span></div>
+                <div class="card">Total Goals: <span id="totalGoals">0</span></div>
+                <div class="card">Completed Goals: <span id="completedGoals">0</span></div>
+            </div>
+        </section>
+
+        <section class="recent-activity">
+            <div id="recentEntries"></div>
+            <div id="recentGoals"></div>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

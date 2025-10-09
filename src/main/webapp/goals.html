@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goals - Mental Wellness Journal</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/style.css">   
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Goals & Progress</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="entries.html">Add Entry</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            Welcome, <span id="userName">User</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="goals-section">
+            <h2>Set Your Goals</h2>
+            <form id="goalForm">
+                <label for="goalTitle">Goal Title:</label>
+                <input type="text" id="goalTitle" name="goalTitle" placeholder="E.g., Meditate daily" required>
+
+                <label for="goalDescription">Description:</label>
+                <textarea id="goalDescription" name="goalDescription" rows="3" placeholder="Describe your goal..." required></textarea>
+
+                <label for="targetDate">Target Date (Optional):</label>
+                <input type="date" id="targetDate" name="targetDate">
+
+                <button type="submit">Add Goal</button>
+            </form>
+
+            <div id="goalsContainer">
+                <!-- Goals will appear here -->
+            </div>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/goals_fixed.js"></script>
+</body>
+</html>

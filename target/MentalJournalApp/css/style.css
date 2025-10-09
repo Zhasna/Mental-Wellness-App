@@ -1,0 +1,269 @@
+/* Global styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+    --primary-color: #B497BD;       /* Cozy lavender */
+    --secondary-color: #E8DAEF;     /* Light lavender accent */
+    --text-color: #333;             /* Dark text */
+    --heading-color: #4B306E;       /* Darker lavender for headings */
+    --button-color: #8C63A2;        /* Button accent */
+    --button-hover: #7A5291;
+    --bg-color: #F7F3F9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--primary-color);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+}
+
+header h1 {
+    font-weight: 600;
+    font-size: 1.8rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--secondary-color);
+}
+
+main {
+    padding: 2rem;
+}
+
+button {
+    background-color: var(--button-color);
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--button-hover);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 0.5rem 0 1rem 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: 'Poppins', sans-serif;
+}
+
+h2 {
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+}
+
+.user-info {
+    color: #666;
+    font-size: 0.9em;
+    margin-left: auto;
+    padding: 0.5rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #f0f0f0;
+}
+
+nav a[onclick] {
+    cursor: pointer;
+    color: #d32f2f;
+}
+
+nav a[onclick]:hover {
+    background-color: #ffebee;
+}
+
+.recent-activity {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .recent-activity {
+        grid-template-columns: 1fr;
+    }
+    
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .user-info {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+}
+
+.entries-display {
+    margin-top: 2rem;
+}
+
+.entry-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.entry-date {
+    color: #666;
+}
+
+.entry-mood {
+    font-size: 1.2em;
+}
+
+.entry-content {
+    color: #333;
+    line-height: 1.6;
+}
+
+.goal-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.goal-card.completed {
+    background-color: #f8f9fa;
+    border-color: #28a745;
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.goal-title {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.goal-title.completed {
+    text-decoration: line-through;
+    color: #666;
+}
+
+.goal-description {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.goal-target-date {
+    color: #007bff;
+    font-size: 0.9em;
+    margin-bottom: 0.5rem;
+}
+
+.goal-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.goal-actions button {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.edit-btn {
+    color: #007bff;
+}
+
+.delete-btn {
+    color: #dc3545;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.no-entries, .no-goals {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem;
+}
+
+
+

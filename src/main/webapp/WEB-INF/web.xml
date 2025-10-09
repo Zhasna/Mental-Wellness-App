@@ -1,0 +1,86 @@
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <!-- Register Servlet -->
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>com.journal.servlets.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/api/register</url-pattern>
+    </servlet-mapping>
+
+    <!-- Login Servlet -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.journal.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/api/login</url-pattern>
+    </servlet-mapping>
+
+    <!-- Entry Servlet -->
+    <servlet>
+        <servlet-name>EntryServlet</servlet-name>
+        <servlet-class>com.journal.servlets.EntryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EntryServlet</servlet-name>
+        <url-pattern>/api/entries</url-pattern>
+    </servlet-mapping>
+
+    <!-- Goals Servlet -->
+    <servlet>
+        <servlet-name>GoalsServlet</servlet-name>
+        <servlet-class>com.journal.servlets.GoalsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GoalsServlet</servlet-name>
+        <url-pattern>/api/goals</url-pattern>
+    </servlet-mapping>
+
+    <!-- Mood Servlet -->
+    <servlet>
+        <servlet-name>MoodServlet</servlet-name>
+        <servlet-class>com.journal.servlets.MoodServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MoodServlet</servlet-name>
+        <url-pattern>/api/moods</url-pattern>
+    </servlet-mapping>
+
+    <!-- Profile Servlet -->
+    <servlet>
+        <servlet-name>ProfileServlet</servlet-name>
+        <servlet-class>com.journal.servlets.ProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileServlet</servlet-name>
+        <url-pattern>/api/profile</url-pattern>
+    </servlet-mapping>
+
+    <!-- Stats Servlet -->
+    <servlet>
+        <servlet-name>StatsServlet</servlet-name>
+        <servlet-class>com.journal.servlets.StatsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StatsServlet</servlet-name>
+        <url-pattern>/api/stats</url-pattern>
+    </servlet-mapping>
+
+    <!-- Session Configuration -->
+    <session-config>
+        <session-timeout>30</session-timeout> <!-- 30 minutes -->
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+</web-app>
+
