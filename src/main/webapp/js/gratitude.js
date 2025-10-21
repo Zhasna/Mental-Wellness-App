@@ -1,3 +1,5 @@
+let isEditMode = false; // Track if we're in edit mode
+
 document.addEventListener('DOMContentLoaded', async () => {
     if (!checkAuth()) return;
     bindAddControls();
@@ -91,6 +93,10 @@ function escapeForJs(text) {
 
 async function editGratitude(id, text) {
     closeGratDrawer();
+    
+    // Set edit mode flag
+    isEditMode = true;
+    
     const input = document.getElementById('gratInput');
     const btn = document.getElementById('gratAddBtn');
     
@@ -116,6 +122,7 @@ async function editGratitude(id, text) {
     
     // Cancel handler
     const resetForm = () => {
+        isEditMode = false; // Reset edit mode
         input.value = '';
         btn.textContent = originalText;
         btn.style.background = '';
@@ -149,6 +156,7 @@ async function editGratitude(id, text) {
             });
             
             if (res.ok) {
+                isEditMode = false; // Reset edit mode
                 resetForm();
                 await renderBox();
                 alert('Gratitude updated successfully!');
@@ -200,6 +208,11 @@ function bindAddControls(){
     const btn = document.getElementById('gratAddBtn');
     if (!input || !btn) return;
     const add = async () => {
+        // If in edit mode, don't run this - let the edit handler run instead
+        if (isEditMode) {
+            return;
+        }
+        
         const text = (input.value || '').trim();
         if (!text) return;
         // Persist using entries API with a gratitude tag

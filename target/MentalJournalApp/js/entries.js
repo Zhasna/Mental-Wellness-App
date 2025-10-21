@@ -1,3 +1,5 @@
+let isEditMode = false; // Track if we're in edit mode
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("journalForm");
     
@@ -12,6 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (form) {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+
+            // If in edit mode, don't run this handler - let the edit handler run instead
+            if (isEditMode) {
+                return;
+            }
 
             // Debug: Log form elements
             console.log('Form submitted');
@@ -140,6 +147,9 @@ function escapeForAttribute(text) {
 }
 
 async function editEntry(id, date, mood, content) {
+    // Set edit mode flag
+    isEditMode = true;
+    
     // Populate the form with the entry data
     document.getElementById('date').value = date;
     document.getElementById('mood').value = mood;
@@ -164,13 +174,12 @@ async function editEntry(id, date, mood, content) {
     }
     
     cancelBtn.onclick = () => {
+        isEditMode = false; // Reset edit mode
         form.reset();
         submitBtn.textContent = originalText;
         submitBtn.style.background = '';
         cancelBtn.remove();
         form.onsubmit = null;
-        // Restore original form handler
-        location.reload();
     };
     
     // Override form submission
@@ -204,6 +213,7 @@ async function editEntry(id, date, mood, content) {
             
             if (response.ok) {
                 alert('Entry updated successfully!');
+                isEditMode = false; // Reset edit mode
                 form.reset();
                 submitBtn.textContent = originalText;
                 submitBtn.style.background = '';
