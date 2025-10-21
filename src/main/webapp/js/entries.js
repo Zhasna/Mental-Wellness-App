@@ -7,12 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     // Get user ID from session storage
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) {
-        alert('User not authenticated');
-        window.location.href = 'login.html';
-        return;
-    }
+    // server session holds user
 
     if (form) {
         form.addEventListener("submit", async (e) => {
@@ -53,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        userId: userId,
                         date: date,
                         mood: mood,
                         content: entry.trim()
@@ -81,13 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadUserEntries() {
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) return;
-    
     try {
-        const response = await fetch(`/MentalJournalApp/api/entries?userId=${userId}`);
+        const response = await fetch(`/MentalJournalApp/api/entries`);
         if (response.ok) {
-            const entries = await response.json();
+            let entries = await response.json();
+            // Exclude gratitude-tagged notes from regular entries
+            entries = entries.filter(e => !String(e.content || '').trim().toLowerCase().startsWith('[gratitude]'));
             displayEntries(entries);
         } else {
             console.error('Failed to load entries');

@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Goals - Mental Wellness Journal</title>
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/style.css">   
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=4">
+    <link rel="stylesheet" href="css/style.css?v=4">   
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>Goals & Progress</h1>
+        <h1 class="nav-logo">Mental Wellness</h1>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="entries.html">Add Entry</a></li>
                 <li><a href="stats.html">Stats</a></li>
                 <li><a href="goals.html">Goals</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
@@ -29,18 +32,26 @@
     <main>
         <section class="goals-section">
             <h2>Set Your Goals</h2>
-            <form id="goalForm">
-                <label for="goalTitle">Goal Title:</label>
-                <input type="text" id="goalTitle" name="goalTitle" placeholder="E.g., Meditate daily" required>
+            <div class="goal-form-container">
+                <form id="goalForm" class="goal-form">
+                    <div class="form-group">
+                        <label for="goalTitle">Goal Title</label>
+                        <input type="text" id="goalTitle" name="goalTitle" placeholder="E.g., Meditate daily" required>
+                    </div>
 
-                <label for="goalDescription">Description:</label>
-                <textarea id="goalDescription" name="goalDescription" rows="3" placeholder="Describe your goal..." required></textarea>
+                    <div class="form-group">
+                        <label for="goalDescription">Description</label>
+                        <textarea id="goalDescription" name="goalDescription" rows="3" placeholder="Describe your goal..." required></textarea>
+                    </div>
 
-                <label for="targetDate">Target Date (Optional):</label>
-                <input type="date" id="targetDate" name="targetDate">
+                    <div class="form-group">
+                        <label for="targetDate">Target Date (Optional)</label>
+                        <input type="date" id="targetDate" name="targetDate">
+                    </div>
 
-                <button type="submit">Add Goal</button>
-            </form>
+                    <button type="submit" class="goal-button">Add Goal</button>
+                </form>
+            </div>
 
             <div id="goalsContainer">
                 <!-- Goals will appear here -->
@@ -48,7 +59,7 @@
         </section>
     </main>
 
-    <script src="js/auth.js"></script>
-    <script src="js/goals_fixed.js"></script>
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/goals.js?v=4"></script>
 </body>
 </html>

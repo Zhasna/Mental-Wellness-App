@@ -74,23 +74,25 @@ public class EntryDAO {
         return entries;
     }
 
-    public boolean updateEntry(Entry entry) throws SQLException {
-        String sql = "UPDATE entries SET entry_date = ?, mood = ?, content = ? WHERE id = ?";
+    public boolean updateEntryOwned(Long userId, Entry entry) throws SQLException {
+        String sql = "UPDATE entries SET entry_date = ?, mood = ?, content = ? WHERE id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDate(1, entry.getEntryDate());
             ps.setString(2, entry.getMood());
             ps.setString(3, entry.getContent());
             ps.setLong(4, entry.getId());
+            ps.setLong(5, userId);
             return ps.executeUpdate() > 0;
         }
     }
 
-    public boolean deleteEntry(Long id) throws SQLException {
-        String sql = "DELETE FROM entries WHERE id = ?";
+    public boolean deleteEntryOwned(Long userId, Long id) throws SQLException {
+        String sql = "DELETE FROM entries WHERE id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            ps.setLong(2, userId);
             return ps.executeUpdate() > 0;
         }
     }

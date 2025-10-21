@@ -39,10 +39,19 @@ public class DBConnection {
                   id IDENTITY PRIMARY KEY,
                   name VARCHAR(255),
                   email VARCHAR(255) UNIQUE,
-                  password VARCHAR(255),
+                  password_hash VARCHAR(255),
                   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
                 """);
+
+            // Backward compatibility: if legacy column `password` exists, ensure `password_hash` exists and copy data
+            try {
+                st.executeUpdate("ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)");
+                // Copy data from legacy column if present and password_hash is null
+                st.executeUpdate("UPDATE users SET password_hash = password WHERE password_hash IS NULL");
+            } catch (SQLException ignored) {
+                // Ignore if ALTER not supported or column already exists
+            }
             
             // entries table
             st.executeUpdate("""

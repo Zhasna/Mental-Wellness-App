@@ -1,0 +1,79 @@
+# Maven
+/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+/.idea/
+*.iml
+/.project
+/.classpath
+/.settings/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.bak
+
+# Logs
+*.log
+logs/
+
+# Database files (if you ever switch from H2 in-memory)
+*.db
+*.sqlite
+*.h2.db
+/data/
+/db/
+
+# Environment & Config files (IMPORTANT - sensitive data)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.properties
+!pom.xml
+application.yml
+application-*.yml
+config.properties
+database.properties
+secrets.json
+
+# Security & API Keys
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+
+# Generated/exploded WAR or duplicates
+/src/MentalJournalApp/
+/MentalJournalApp.war
+*.war
+*.ear
+*.jar
+!maven-wrapper.jar
+/frontend/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+_tmp/
+
+# Build artifacts
+/build/
+/dist/
+/out/

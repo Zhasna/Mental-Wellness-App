@@ -22,17 +22,16 @@ public class MoodServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
-        String userIdParam = request.getParameter("userId");
-        if (userIdParam == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"message\":\"User ID is required\"}");
-            return;
-        }
-
         try {
-            Long userId = Long.parseLong(userIdParam);
+            Long userId = com.journal.utils.SessionUtils.getUserId(request);
+            if (userId == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"message\":\"Authentication required\"}");
+                return;
+            }
             List<Mood> moods = moodDAO.findByUserId(userId);
             response.getWriter().write(gson.toJson(moods));
         } catch (NumberFormatException e) {
@@ -47,22 +46,25 @@ public class MoodServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         try {
             Map<String, String> body = gson.fromJson(request.getReader(), 
                 new TypeToken<Map<String, String>>(){}.getType());
             
-            String userIdStr = body.get("userId");
-            String moodType = body.get("mood");
-            
-            if (userIdStr == null || moodType == null) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"message\":\"User ID and mood are required\"}");
+            Long userId = com.journal.utils.SessionUtils.getUserId(request);
+            if (userId == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"message\":\"Authentication required\"}");
                 return;
             }
-            
-            Long userId = Long.parseLong(userIdStr);
+            String moodType = body.get("mood");
+            if (moodType == null || moodType.trim().isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"message\":\"Mood is required\"}");
+                return;
+            }
             Mood mood = new Mood();
             mood.setUserId(userId);
             mood.setMood(moodType);

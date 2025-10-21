@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Journal Entries - Mental Wellness Journal</title>
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/style.css">   
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=4">
+    <link rel="stylesheet" href="css/style.css?v=4">   
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>Journal Entries</h1>
+        <h1 class="nav-logo">Mental Wellness</h1>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="entries.html">Add Entry</a></li>
                 <li><a href="stats.html">Stats</a></li>
                 <li><a href="goals.html">Goals</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
@@ -29,30 +32,38 @@
     <main>
         <section class="add-entry-section">
             <h2>New Journal Entry</h2>
-            <form id="journalForm">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
+            <div class="entry-form-container">
+                <form id="journalForm" class="entry-form">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
 
-                <label for="mood">Mood:</label>
-                <select id="mood" name="mood" required>
-                    <option value="">Select your mood...</option>
-                    <option value="happy">😊 Happy</option>
-                    <option value="sad">😢 Sad</option>
-                    <option value="angry">😠 Angry</option>
-                    <option value="anxious">😰 Anxious</option>
-                    <option value="calm">😌 Calm</option>
-                    <option value="tired">😴 Tired</option>
-                    <option value="neutral">😐 Neutral</option>
-                    <option value="excited">🤩 Excited</option>
-                    <option value="frustrated">😤 Frustrated</option>
-                    <option value="peaceful">🕊️ Peaceful</option>
-                </select>
+                    <div class="form-group">
+                        <label for="mood">Mood</label>
+                        <select id="mood" name="mood" required>
+                            <option value="">Select your mood...</option>
+                            <option value="happy">😊 Happy</option>
+                            <option value="sad">😢 Sad</option>
+                            <option value="angry">😠 Angry</option>
+                            <option value="anxious">😰 Anxious</option>
+                            <option value="calm">😌 Calm</option>
+                            <option value="tired">😴 Tired</option>
+                            <option value="neutral">😐 Neutral</option>
+                            <option value="excited">🤩 Excited</option>
+                            <option value="frustrated">😤 Frustrated</option>
+                            <option value="peaceful">🕊️ Peaceful</option>
+                        </select>
+                    </div>
 
-                <label for="entry">Your Thoughts:</label>
-                <textarea id="entry" name="entry" rows="6" placeholder="Write your thoughts..." required></textarea>
+                    <div class="form-group">
+                        <label for="entry">Your Thoughts</label>
+                        <textarea id="entry" name="entry" rows="6" placeholder="Write your thoughts..." required></textarea>
+                    </div>
 
-                <button type="submit">Save Entry</button>
-            </form>
+                    <button type="submit" class="entry-button">Save Entry</button>
+                </form>
+            </div>
         </section>
 
         <section class="entries-display">
@@ -63,7 +74,7 @@
         </section>
     </main>
 
-    <script src="js/auth.js"></script>
-    <script src="js/entries_v2.js"></script>
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/entries.js?v=4"></script>
 </body>
 </html>

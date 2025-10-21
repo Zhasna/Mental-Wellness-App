@@ -20,11 +20,15 @@ import jakarta.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet {
     private final Gson gson = new Gson();
+    private static final java.util.concurrent.ConcurrentHashMap<String, java.util.Deque<Long>> ATTEMPTS = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final int MAX_ATTEMPTS = 5;
+    private static final long WINDOW_MS = 10 * 60 * 1000L; // 10 minutes
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         try {
             Map<String, String> body = gson.fromJson(request.getReader(), 
@@ -33,6 +37,27 @@ public class LoginServlet extends HttpServlet {
             String email = body.get("email");
             String password = body.get("password");
             
+            // Simple rate limiting by client IP
+            String clientKey = request.getRemoteAddr();
+            long now = System.currentTimeMillis();
+            ATTEMPTS.compute(clientKey, (k, q) -> {
+                if (q == null) q = new java.util.ArrayDeque<>();
+                // purge old attempts
+                while (!q.isEmpty() && now - q.peekFirst() > WINDOW_MS) {
+                    q.pollFirst();
+                }
+                if (q.size() >= MAX_ATTEMPTS) {
+                    return q; // will be handled below
+                }
+                return q;
+            });
+            java.util.Deque<Long> queue = ATTEMPTS.get(clientKey);
+            if (queue.size() >= MAX_ATTEMPTS) {
+                response.setStatus(429);
+                response.getWriter().write("{\"message\":\"Too many login attempts. Please try again later.\"}");
+                return;
+            }
+            
             if (email == null || password == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().write("{\"message\":\"Email and password are required\"}");
@@ -40,15 +65,22 @@ public class LoginServlet extends HttpServlet {
             }
             
             // Validate user credentials
-            String sql = "SELECT id, name, email, password FROM users WHERE email = ?";
+            String sql = "SELECT id, name, email, password_hash FROM users WHERE email = ?";
             try (Connection conn = DBConnection.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, email);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        String hashedPassword = rs.getString("password");
+                        String hashedPassword = rs.getString("password_hash");
                         if (PasswordUtils.verifyPassword(password, hashedPassword)) {
-                            // Login successful - Create server-side session
+                            // reset attempts on success
+                            java.util.Deque<Long> q = ATTEMPTS.get(clientKey);
+                            if (q != null) q.clear();
+                            // Login successful - Prevent session fixation by invalidating any existing session
+                            HttpSession existing = request.getSession(false);
+                            if (existing != null) {
+                                existing.invalidate();
+                            }
                             HttpSession session = request.getSession(true);
                             session.setAttribute("userId", rs.getLong("id"));
                             session.setAttribute("username", rs.getString("name"));
@@ -64,10 +96,22 @@ public class LoginServlet extends HttpServlet {
                                 "email", rs.getString("email")
                             )));
                         } else {
+                            // record failed attempt
+                            ATTEMPTS.compute(clientKey, (k, q) -> {
+                                if (q == null) q = new java.util.ArrayDeque<>();
+                                q.addLast(System.currentTimeMillis());
+                                return q;
+                            });
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().write("{\"message\":\"Invalid credentials\"}");
                         }
                     } else {
+                        // record failed attempt
+                        ATTEMPTS.compute(clientKey, (k, q) -> {
+                            if (q == null) q = new java.util.ArrayDeque<>();
+                            q.addLast(System.currentTimeMillis());
+                            return q;
+                        });
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.getWriter().write("{\"message\":\"Invalid credentials\"}");
                     }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - Mental Wellness Journal</title>
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/calendar.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="nav-logo">Mental Wellness</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="entries.html">Add Entry</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            Welcome, <span id="userName">User</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="calendar-header">
+            <div class="calendar-title">
+                <button class="cal-nav" id="prevMonth" aria-label="Previous month">‹</button>
+                <h2 id="monthLabel">Month YYYY</h2>
+                <button class="cal-nav" id="nextMonth" aria-label="Next month">›</button>
+            </div>
+        </section>
+
+        <section class="calendar-card">
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar will be rendered here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Side drawer -->
+    <aside class="drawer" id="entryDrawer" aria-hidden="true">
+        <div class="drawer-header">
+            <h3 id="drawerDate">Date</h3>
+            <button class="drawer-close" id="closeDrawer" aria-label="Close">×</button>
+        </div>
+        <div class="drawer-content" id="drawerContent">
+            <!-- Mood + entry text will render here -->
+        </div>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/calendar.js?v=4"></script>
+</body>
+</html>
+
+

@@ -1,14 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const userEmail = sessionStorage.getItem('userEmail');
-    
-    if (!userEmail) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
+    if (!checkAuth()) return;
     try {
-        // Load user profile
-        const response = await fetch(`/MentalJournalApp/api/profile?email=${encodeURIComponent(userEmail)}`);
+        // Load user profile (session-based)
+        const response = await fetch(`/MentalJournalApp/api/profile`);
         if (response.ok) {
             const user = await response.json();
             populateProfile(user);
@@ -67,7 +61,7 @@ async function updateProfile(e) {
     }
     
     try {
-        const updateData = { email, name };
+        const updateData = { email: email, name: name };
         if (newPassword) {
             updateData.currentPassword = currentPassword;
             updateData.newPassword = newPassword;
@@ -86,7 +80,7 @@ async function updateProfile(e) {
         if (response.ok) {
             alert('Profile updated successfully!');
             // Update session storage
-            sessionStorage.setItem('userName', name);
+            sessionStorage.setItem('username', name);
             // Clear password fields
             document.getElementById('currentPassword').value = '';
             document.getElementById('newPassword').value = '';

@@ -23,18 +23,20 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
-        String userIdParam = request.getParameter("userId");
-        if (userIdParam == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"message\":\"User ID is required\"}");
+        // Require authenticated session and use server-side userId
+        Long sessionUserId = com.journal.utils.SessionUtils.getUserId(request);
+        if (sessionUserId == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"message\":\"Authentication required\"}");
             return;
         }
 
         try {
-            Long userId = Long.parseLong(userIdParam);
-            String sql = "SELECT id, username, email FROM users WHERE id = ?";
+            Long userId = sessionUserId;
+            String sql = "SELECT id, name, email, created_at FROM users WHERE id = ?";
             try (Connection conn = DBConnection.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setLong(1, userId);
@@ -42,8 +44,9 @@ public class ProfileServlet extends HttpServlet {
                     if (rs.next()) {
                         response.getWriter().write(gson.toJson(Map.of(
                             "id", rs.getLong("id"),
-                            "username", rs.getString("username"),
-                            "email", rs.getString("email")
+                            "name", rs.getString("name"),
+                            "email", rs.getString("email"),
+                            "createdAt", rs.getTimestamp("created_at")
                         )));
                     } else {
                         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -63,32 +66,32 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         try {
             Map<String, String> body = gson.fromJson(request.getReader(), 
                 new TypeToken<Map<String, String>>(){}.getType());
             
-            String userIdStr = body.get("userId");
-            String username = body.get("profileName");
-            String email = body.get("profileEmail");
+            // userId comes from session, ignore any client-provided value
+            Long userId = com.journal.utils.SessionUtils.getUserId(request);
+            String name = body.get("name");
+            String email = body.get("email");
             String currentPassword = body.get("currentPassword");
             String newPassword = body.get("newPassword");
             
-            if (userIdStr == null) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"message\":\"User ID is required\"}");
+            if (userId == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"message\":\"Authentication required\"}");
                 return;
             }
-            
-            Long userId = Long.parseLong(userIdStr);
             
             // Build update query dynamically
             StringBuilder sql = new StringBuilder("UPDATE users SET ");
             boolean hasUpdates = false;
             
-            if (username != null && !username.trim().isEmpty()) {
-                sql.append("username = ?, ");
+            if (name != null && !name.trim().isEmpty()) {
+                sql.append("name = ?, ");
                 hasUpdates = true;
             }
             if (email != null && !email.trim().isEmpty()) {
@@ -101,7 +104,7 @@ public class ProfileServlet extends HttpServlet {
                     response.getWriter().write("{\"message\":\"Current password is required to change password\"}");
                     return;
                 }
-                sql.append("password = ?, ");
+                sql.append("password_hash = ?, ");
                 hasUpdates = true;
             }
             
@@ -119,20 +122,20 @@ public class ProfileServlet extends HttpServlet {
                  PreparedStatement ps = conn.prepareStatement(sql.toString())) {
                 
                 int paramIndex = 1;
-                if (username != null && !username.trim().isEmpty()) {
-                    ps.setString(paramIndex++, username);
+                if (name != null && !name.trim().isEmpty()) {
+                    ps.setString(paramIndex++, name);
                 }
                 if (email != null && !email.trim().isEmpty()) {
                     ps.setString(paramIndex++, email);
                 }
                 if (newPassword != null && !newPassword.trim().isEmpty()) {
                     // Verify current password first
-                    String verifySql = "SELECT password FROM users WHERE id = ?";
+                    String verifySql = "SELECT password_hash FROM users WHERE id = ?";
                     try (PreparedStatement verifyPs = conn.prepareStatement(verifySql)) {
                         verifyPs.setLong(1, userId);
                         try (ResultSet rs = verifyPs.executeQuery()) {
                             if (rs.next()) {
-                                String storedPassword = rs.getString("password");
+                                String storedPassword = rs.getString("password_hash");
                                 if (!PasswordUtils.verifyPassword(currentPassword, storedPassword)) {
                                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                     response.getWriter().write("{\"message\":\"Current password is incorrect\"}");

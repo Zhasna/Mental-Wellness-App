@@ -6,12 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
     
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) {
-        alert('User not authenticated');
-        window.location.href = 'login.html';
-        return;
-    }
+    // session-based auth handled by server; just ensure we have a session
 
     if (form) {
         form.addEventListener("submit", async (e) => {
@@ -39,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        userId: userId,
                         goalTitle: title,
                         goalDescription: description,
                         targetDate: targetDate || null
@@ -67,11 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadGoals() {
-    const userId = sessionStorage.getItem('userId');
-    if (!userId) return;
-    
     try {
-        const response = await fetch(`/MentalJournalApp/api/goals?userId=${userId}`);
+        const response = await fetch(`/MentalJournalApp/api/goals`);
         if (response.ok) {
             const goals = await response.json();
             displayGoals(goals);
@@ -99,8 +90,8 @@ function displayGoals(goals) {
         goalDiv.className = `goal-card ${goal.completed ? 'completed' : ''}`;
         goalDiv.innerHTML = `
             <div class="goal-header">
-                <h3 class="goal-title">${goal.title}</h3>
-                <button class="toggle-btn" onclick="toggleGoal(${goal.id}, ${!goal.completed})">
+                <h3 class="goal-title ${goal.completed ? 'completed' : ''}">${goal.title}</h3>
+                <button class="toggle-btn" onclick="toggleGoal(${goal.id}, ${!goal.completed})" title="Mark as ${goal.completed ? 'incomplete' : 'completed'}">
                     ${goal.completed ? '✅' : '⭕'}
                 </button>
             </div>
@@ -116,36 +107,33 @@ function displayGoals(goals) {
 }
 
 async function toggleGoal(goalId, completed) {
+    console.log('toggleGoal called with:', goalId, completed);
     try {
-        // First get the goal details
-        const userId = sessionStorage.getItem('userId');
-        const goalsResponse = await fetch(`/MentalJournalApp/api/goals?userId=${userId}`);
-        const goals = await goalsResponse.json();
-        const goal = goals.find(g => g.id === goalId);
-        
-        if (!goal) {
-            alert('Goal not found');
-            return;
-        }
-
         const response = await fetch('/MentalJournalApp/api/goals', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id: goalId,
-                title: goal.title,
-                description: goal.description,
-                targetDate: goal.targetDate,
+                goalId: String(goalId),
                 completed: completed
             })
         });
 
         const data = await response.json();
+        console.log('Toggle response:', response.status, data);
         
         if (response.ok) {
-            loadGoals(); // Reload the goals list
+            // Update UI immediately for better UX
+            const goalCard = document.querySelector(`[onclick*="${goalId}"]`).closest('.goal-card');
+            if (goalCard) {
+                if (completed) {
+                    goalCard.classList.add('completed');
+                } else {
+                    goalCard.classList.remove('completed');
+                }
+            }
+            loadGoals(); // Reload to ensure consistency
         } else {
             alert("Error: " + data.message);
         }
@@ -156,16 +144,18 @@ async function toggleGoal(goalId, completed) {
 }
 
 async function deleteGoal(goalId) {
+    console.log('deleteGoal called with:', goalId);
     if (!confirm('Are you sure you want to delete this goal?')) {
         return;
     }
 
     try {
-        const response = await fetch(`/MentalJournalApp/api/goals?id=${goalId}`, {
+        const response = await fetch(`/MentalJournalApp/api/goals?goalId=${goalId}`, {
             method: 'DELETE'
         });
 
         const data = await response.json();
+        console.log('Delete response:', response.status, data);
         
         if (response.ok) {
             loadGoals(); // Reload the goals list
@@ -179,39 +169,94 @@ async function deleteGoal(goalId) {
 }
 
 function editGoal(goalId) {
-    // Simple implementation - could be enhanced with a modal
-    const newTitle = prompt('Enter new title:');
-    const newDescription = prompt('Enter new description:');
-    
-    if (newTitle && newDescription) {
-        updateGoal(goalId, newTitle, newDescription);
+    console.log('editGoal called with:', goalId);
+    // Find the goal in the current display
+    const goalCard = document.querySelector(`[onclick*="editGoal(${goalId})"]`).closest('.goal-card');
+    if (!goalCard) {
+        console.error('Goal card not found for ID:', goalId);
+        return;
     }
+    
+    const titleElement = goalCard.querySelector('.goal-title');
+    const descriptionElement = goalCard.querySelector('.goal-description');
+    
+    const currentTitle = titleElement.textContent;
+    const currentDescription = descriptionElement.textContent;
+    
+    // Create inline editing form
+    const editForm = document.createElement('div');
+    editForm.className = 'edit-form';
+    editForm.innerHTML = `
+        <div class="form-group">
+            <label>Title:</label>
+            <input type="text" id="editTitle" value="${currentTitle}" class="edit-input">
+        </div>
+        <div class="form-group">
+            <label>Description:</label>
+            <textarea id="editDescription" class="edit-textarea">${currentDescription}</textarea>
+        </div>
+        <div class="edit-actions">
+            <button onclick="saveGoalEdit(${goalId})" class="save-btn">Save</button>
+            <button onclick="cancelGoalEdit(${goalId})" class="cancel-btn">Cancel</button>
+        </div>
+    `;
+    
+    // Replace the goal content with edit form
+    goalCard.innerHTML = '';
+    goalCard.appendChild(editForm);
 }
 
-async function updateGoal(goalId, title, description) {
+async function saveGoalEdit(goalId) {
+    const titleInput = document.getElementById('editTitle');
+    const descriptionInput = document.getElementById('editDescription');
+    
+    if (!titleInput || !descriptionInput) return;
+    
+    const newTitle = titleInput.value.trim();
+    const newDescription = descriptionInput.value.trim();
+    
+    if (!newTitle || !newDescription) {
+        alert('Title and description are required');
+        return;
+    }
+    
     try {
-        const response = await fetch('/MentalJournalApp/api/goals', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: goalId,
-                title: title,
-                description: description
-            })
+        // For now, we'll delete the old goal and create a new one
+        // This is a workaround since the servlet doesn't support full updates
+        const deleteResponse = await fetch(`/MentalJournalApp/api/goals?goalId=${goalId}`, {
+            method: 'DELETE'
         });
-
-        const data = await response.json();
         
-        if (response.ok) {
-            loadGoals(); // Reload the goals list
+        if (deleteResponse.ok) {
+            // Create new goal with updated content
+            const createResponse = await fetch('/MentalJournalApp/api/goals', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    goalTitle: newTitle,
+                    goalDescription: newDescription,
+                    targetDate: null
+                })
+            });
+            
+            if (createResponse.ok) {
+                alert('Goal updated successfully!');
+                loadGoals(); // Reload the goals list
+            } else {
+                alert('Failed to update goal. Please try again.');
+            }
         } else {
-            alert("Error: " + data.message);
+            alert('Failed to update goal. Please try again.');
         }
     } catch (error) {
         console.error('Error:', error);
         alert('Failed to update goal. Please try again.');
     }
+}
+
+function cancelGoalEdit(goalId) {
+    loadGoals(); // Reload to restore original state
 }
 

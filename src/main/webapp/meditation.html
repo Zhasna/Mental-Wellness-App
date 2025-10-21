@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Timer - Mental Wellness Journal</title>
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/meditation.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="nav-logo">Mental Wellness</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="entries.html">Add Entry</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            Welcome, <span id="userName">User</span>
+        </div>
+    </header>
+
+    <main class="meditation-container">
+        <section class="meditation-header">
+            <h2>Find Your Inner Peace</h2>
+            <p class="meditation-subtitle">Take a moment to breathe and center yourself</p>
+        </section>
+
+        <section class="timer-section">
+            <div class="timer-display">
+                <div class="timer-circle">
+                    <div class="timer-time" id="timerDisplay">00:00</div>
+                    <div class="timer-status" id="timerStatus">Ready to begin</div>
+                </div>
+            </div>
+
+            <div class="preset-buttons">
+                <h3>Quick Start</h3>
+                <div class="preset-grid">
+                    <button class="preset-btn" data-minutes="1">1 min</button>
+                    <button class="preset-btn" data-minutes="3">3 min</button>
+                    <button class="preset-btn" data-minutes="5">5 min</button>
+                    <button class="preset-btn" data-minutes="10">10 min</button>
+                    <button class="preset-btn" data-minutes="15">15 min</button>
+                </div>
+            </div>
+
+            <div class="custom-time">
+                <h3>Custom Duration</h3>
+                <div class="time-input-group">
+                    <input type="number" id="customMinutes" placeholder="Minutes" min="1" max="120" value="5">
+                    <span class="time-label">minutes</span>
+                </div>
+            </div>
+
+            <div class="timer-controls">
+                <button class="control-btn start-btn" id="startBtn">Start</button>
+                <button class="control-btn pause-btn" id="pauseBtn" disabled>Pause</button>
+                <button class="control-btn reset-btn" id="resetBtn">Reset</button>
+            </div>
+
+            <div class="sound-controls">
+                <button class="sound-btn" id="soundBtn">
+                    <span class="sound-icon">🔇</span>
+                    <span class="sound-text">Background Sound</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="completion-message" id="completionMessage" style="display: none;">
+            <div class="completion-content">
+                <h2>Session Complete! 🎉</h2>
+                <p>Great job taking time for yourself. How do you feel?</p>
+                <button class="completion-btn" onclick="resetTimer()">Start New Session</button>
+            </div>
+        </section>
+
+        <!-- Hidden audio elements (owner-provided defaults first, then fallbacks) -->
+        <audio id="backgroundSound" loop>
+            <source src="assets/audio/meditation.mp3" type="audio/mpeg">
+            <source src="assets/audio/meditation.ogg" type="audio/ogg">
+            <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="endSound">
+            <source src="assets/audio/chime.mp3" type="audio/mpeg">
+            <source src="assets/audio/chime.ogg" type="audio/ogg">
+            <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+        </audio>
+    </main>
+
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/meditation.js?v=4"></script>
+</body>
+</html>

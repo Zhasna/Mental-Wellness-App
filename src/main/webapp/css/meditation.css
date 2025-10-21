@@ -1,0 +1,461 @@
+/* Meditation Timer Styles - Matching App Theme */
+
+:root {
+    --meditation-primary: #FFCBB3;      /* Soft peach - matches app */
+    --meditation-secondary: #FFF0E6;     /* Light peach - matches app */
+    --meditation-accent: #FFB89A;       /* Warm peach - matches app */
+    --meditation-warm: #FFFAF7;         /* Soft cream - matches app */
+    --meditation-text: #4A4A4A;         /* Soft dark - matches app */
+    --meditation-heading: #6B4C4C;      /* Warm brown - matches app */
+    --meditation-border: #FFCBB3;       /* Peach border */
+    --meditation-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    --meditation-shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+    --meditation-success: #A8D5BA;      /* Soft green */
+    --meditation-warning: #F4A261;      /* Warm orange */
+    --meditation-danger: #FFB89A;       /* Warm peach */
+}
+
+/* Meditation Container */
+.meditation-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--bg-color) 0%, #FFE6D9 100%);
+    min-height: calc(100vh - 200px);
+}
+
+/* Header Section */
+.meditation-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.meditation-header h2 {
+    color: var(--meditation-heading);
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.meditation-badge {
+    font-size: 2rem;
+    margin-left: 0.5rem;
+}
+
+.meditation-subtitle {
+    color: var(--meditation-text);
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* Timer Section */
+.timer-section {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    box-shadow: var(--meditation-shadow);
+    border: 1px solid var(--meditation-border);
+    backdrop-filter: blur(10px);
+}
+
+/* Timer Display */
+.timer-display {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.timer-circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--meditation-primary) 0%, var(--meditation-secondary) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: var(--meditation-shadow);
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.timer-circle::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: rotate(0deg); opacity: 0.3; }
+    50% { transform: rotate(180deg); opacity: 0.6; }
+}
+
+.timer-time {
+    font-size: 4rem;
+    font-weight: 300;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
+    font-family: 'Inter', monospace;
+    letter-spacing: -0.02em;
+}
+
+.timer-status {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Preset Buttons */
+.preset-buttons {
+    margin-bottom: 2.5rem;
+}
+
+.preset-buttons h3 {
+    color: var(--meditation-heading);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.preset-btn {
+    background: linear-gradient(135deg, var(--meditation-accent) 0%, var(--meditation-warm) 100%);
+    border: 2px solid var(--meditation-border);
+    border-radius: 16px;
+    padding: 1rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--meditation-heading);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(184, 212, 227, 0.2);
+}
+
+.preset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--meditation-shadow-hover);
+    background: linear-gradient(135deg, var(--meditation-primary) 0%, var(--meditation-secondary) 100%);
+    color: white;
+}
+
+.preset-btn.active {
+    background: linear-gradient(135deg, var(--meditation-primary) 0%, var(--meditation-secondary) 100%);
+    color: white;
+    border-color: var(--meditation-primary);
+}
+
+/* Custom Time Input */
+.custom-time {
+    margin-bottom: 2.5rem;
+}
+
+.custom-time h3 {
+    color: var(--meditation-heading);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.time-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+#customMinutes {
+    width: 120px;
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--meditation-border);
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--meditation-heading);
+    transition: all 0.3s ease;
+}
+
+#customMinutes:focus {
+    outline: none;
+    border-color: var(--meditation-primary);
+    box-shadow: 0 0 0 3px rgba(184, 212, 227, 0.2);
+    background: white;
+}
+
+.time-label {
+    color: var(--meditation-text);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Timer Controls */
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.control-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--meditation-shadow);
+    min-width: 120px;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, var(--meditation-success) 0%, #4CAF50 100%);
+    color: white;
+}
+
+.start-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--meditation-shadow-hover);
+}
+
+.pause-btn {
+    background: linear-gradient(135deg, var(--meditation-warning) 0%, #FF9800 100%);
+    color: white;
+}
+
+.pause-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--meditation-shadow-hover);
+}
+
+.reset-btn {
+    background: linear-gradient(135deg, var(--meditation-danger) 0%, #D4A5A5 100%);
+    color: white;
+}
+
+.reset-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--meditation-shadow-hover);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Sound Controls */
+.sound-controls {
+    text-align: center;
+}
+
+.sound-btn {
+    background: linear-gradient(135deg, var(--meditation-secondary) 0%, var(--meditation-primary) 100%);
+    border: 2px solid var(--meditation-border);
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--meditation-heading);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--meditation-shadow);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto;
+}
+
+.sound-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--meditation-shadow-hover);
+}
+
+.sound-btn.active {
+    background: linear-gradient(135deg, var(--meditation-primary) 0%, var(--meditation-secondary) 100%);
+    color: white;
+}
+
+.sound-icon {
+    font-size: 1.2rem;
+}
+
+/* Completion Message */
+.completion-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 203, 179, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.completion-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: var(--meditation-shadow-hover);
+    border: 2px solid var(--meditation-border);
+    max-width: 400px;
+    margin: 2rem;
+}
+
+.completion-content h2 {
+    color: var(--meditation-heading);
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.completion-content p {
+    color: var(--meditation-text);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.completion-btn {
+    background: linear-gradient(135deg, var(--meditation-primary) 0%, var(--meditation-accent) 100%);
+    border: none;
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--meditation-shadow);
+}
+
+.completion-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--meditation-shadow-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .meditation-container {
+        padding: 1rem;
+    }
+    
+    .meditation-header h2 {
+        font-size: 2rem;
+    }
+    
+    .timer-section {
+        padding: 2rem 1rem;
+    }
+    
+    .timer-circle {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .timer-time {
+        font-size: 3.2rem;
+    }
+    
+    .preset-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .preset-btn {
+        padding: 0.8rem 0.3rem;
+        font-size: 0.9rem;
+    }
+    
+    .timer-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .control-btn {
+        width: 200px;
+    }
+    
+    .time-input-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .completion-content {
+        margin: 1rem;
+        padding: 2rem;
+    }
+    
+    .completion-content h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .timer-circle {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .timer-time {
+        font-size: 2.5rem;
+    }
+    
+    .preset-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .control-btn {
+        width: 160px;
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+/* Animation for timer running */
+.timer-circle.running {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Animation for timer paused */
+.timer-circle.paused {
+    animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.02); opacity: 1; }
+}

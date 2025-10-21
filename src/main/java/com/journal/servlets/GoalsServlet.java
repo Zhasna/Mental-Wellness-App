@@ -24,7 +24,8 @@ public class GoalsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
@@ -50,7 +51,8 @@ public class GoalsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
@@ -104,7 +106,13 @@ public class GoalsServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
+        
+        // Validate session
+        if (!SessionUtils.validateSession(request, response)) {
+            return;
+        }
         
         try {
             Map<String, String> body = gson.fromJson(request.getReader(), 
@@ -122,7 +130,8 @@ public class GoalsServlet extends HttpServlet {
             Long goalId = Long.parseLong(goalIdStr);
             boolean completed = Boolean.parseBoolean(completedStr);
             
-            boolean updated = goalDAO.updateGoalCompletion(goalId, completed);
+            Long userId = SessionUtils.getUserId(request);
+            boolean updated = goalDAO.updateGoalCompletionOwned(userId, goalId, completed);
             if (updated) {
                 response.getWriter().write("{\"message\":\"Goal updated successfully\"}");
             } else {
@@ -145,7 +154,13 @@ public class GoalsServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
+        
+        // Validate session
+        if (!SessionUtils.validateSession(request, response)) {
+            return;
+        }
         
         String goalIdParam = request.getParameter("goalId");
         if (goalIdParam == null) {
@@ -156,7 +171,8 @@ public class GoalsServlet extends HttpServlet {
 
         try {
             Long goalId = Long.parseLong(goalIdParam);
-            boolean deleted = goalDAO.deleteGoal(goalId);
+            Long userId = SessionUtils.getUserId(request);
+            boolean deleted = goalDAO.deleteGoalOwned(userId, goalId);
             if (deleted) {
                 response.getWriter().write("{\"message\":\"Goal deleted successfully\"}");
             } else {

@@ -1,0 +1,161 @@
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.calendar-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cal-nav {
+    background: linear-gradient(135deg, var(--button-color) 0%, var(--button-hover) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+}
+
+.calendar-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(232, 180, 184, 0.1);
+    padding: 1.25rem;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.6rem;
+}
+
+.weekday-label {
+    text-align: center;
+    color: var(--heading-color);
+    font-weight: 600;
+    padding: 0.5rem 0;
+}
+
+.day-cell {
+    background: var(--card-bg);
+    border: 1px solid rgba(232, 180, 184, 0.2);
+    border-radius: 12px;
+    min-height: 88px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.day-cell .date {
+    color: var(--heading-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.day-cell .mood { display: none; }
+
+.mood-badge { display: none; }
+
+.mood-badges {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.mood-badges span {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+.mood-badges .more {
+    font-size: 0.75rem;
+    color: var(--accent-color);
+}
+
+.day-cell:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Drawer */
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 420px;
+    max-width: 92vw;
+    height: 100vh;
+    background: var(--card-bg);
+    box-shadow: -8px 0 24px rgba(0,0,0,0.08);
+    border-left: 1px solid rgba(232, 180, 184, 0.2);
+    transition: right var(--transition);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer.open {
+    right: 0;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(232, 180, 184, 0.2);
+}
+
+.drawer-close {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.drawer-content {
+    padding: 1.25rem;
+    overflow-y: auto;
+}
+
+.drawer-entry {
+    background: var(--card-bg);
+    border: 1px solid rgba(232, 180, 184, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.drawer-entry .mood {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 900;
+}
+
+.drawer-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+    .day-cell { min-height: 74px; }
+}
+
+

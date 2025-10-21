@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gratitude Jar - Mental Wellness Journal</title>
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/gratitude.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="nav-logo">Mental Wellness</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="entries.html">Add Entry</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="goals.html">Goals</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            Welcome, <span id="userName">User</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="gratitude-header">
+            <h2>Gratitude Box of Chocolates</h2>
+            <p class="subtitle">Each chocolate holds a sweet moment of gratitude</p>
+        </section>
+
+        <section class="add-gratitude">
+            <div class="add-wrap">
+                <input type="text" id="gratInput" placeholder="Write something you're grateful for..." maxlength="240" />
+                <button id="gratAddBtn" class="add-btn">Add</button>
+            </div>
+        </section>
+
+        <section class="box-card">
+            <div class="lid"><div class="lid-handle"></div></div>
+            <div class="box">
+                <div class="frame"></div>
+                <div class="tray">
+                    <div class="choco-grid" id="chocoGrid"><!-- tokens here --></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Drawer -->
+    <aside class="drawer" id="gratDrawer" aria-hidden="true">
+        <div class="drawer-header">
+            <div>
+                <h3 class="drawer-title">Gratitude Memory</h3>
+                <p class="drawer-subtitle">A sweet moment of gratitude</p>
+            </div>
+            <button class="drawer-close" id="closeGrat" aria-label="Close">×</button>
+        </div>
+        <div class="drawer-content" id="gratContent"></div>
+    </aside>
+    <div class="drawer-backdrop" id="gratBackdrop"></div>
+
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/gratitude.js?v=4"></script>
+</body>
+</html>
+
+

@@ -77,8 +77,8 @@ public class GoalDAO {
         return goals;
     }
 
-    public boolean updateGoal(Goal goal) throws SQLException {
-        String sql = "UPDATE goals SET title = ?, description = ?, target_date = ?, completed = ? WHERE id = ?";
+    public boolean updateGoalOwned(Long userId, Goal goal) throws SQLException {
+        String sql = "UPDATE goals SET title = ?, description = ?, target_date = ?, completed = ? WHERE id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, goal.getTitle());
@@ -86,25 +86,28 @@ public class GoalDAO {
             ps.setDate(3, goal.getTargetDate());
             ps.setBoolean(4, goal.getCompleted());
             ps.setLong(5, goal.getId());
+            ps.setLong(6, userId);
             return ps.executeUpdate() > 0;
         }
     }
 
-    public boolean updateGoalCompletion(Long id, boolean completed) throws SQLException {
-        String sql = "UPDATE goals SET completed = ? WHERE id = ?";
+    public boolean updateGoalCompletionOwned(Long userId, Long id, boolean completed) throws SQLException {
+        String sql = "UPDATE goals SET completed = ? WHERE id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setBoolean(1, completed);
             ps.setLong(2, id);
+            ps.setLong(3, userId);
             return ps.executeUpdate() > 0;
         }
     }
 
-    public boolean deleteGoal(Long id) throws SQLException {
-        String sql = "DELETE FROM goals WHERE id = ?";
+    public boolean deleteGoalOwned(Long userId, Long id) throws SQLException {
+        String sql = "DELETE FROM goals WHERE id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
+            ps.setLong(2, userId);
             return ps.executeUpdate() > 0;
         }
     }

@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Mental Wellness Journal</title>
-    <link rel="stylesheet" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/style.css">   
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css?v=4">
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>User Profile</h1>
+        <h1 class="nav-logo">Mental Wellness</h1>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="entries.html">Add Entry</a></li>
                 <li><a href="stats.html">Stats</a></li>
                 <li><a href="goals.html">Goals</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
@@ -28,35 +31,54 @@
 
     <main>
         <section class="profile-section">
-            <div id="userInfo">
-                <!-- User info will be displayed here -->
+            <h2>Your Profile</h2>
+            
+            <div class="profile-info-container">
+                <div id="userInfo">
+                    <!-- User info will be displayed here -->
+                </div>
             </div>
             
-            <h2>Update Your Profile</h2>
-            <form id="profileForm">
-                <label for="profileName">Full Name:</label>
-                <input type="text" id="profileName" name="profileName" placeholder="Your Name" required>
+            <div class="profile-form-container">
+                <h3>Update Your Profile</h3>
+                <form id="profileForm" class="profile-form">
+                    <div class="form-group">
+                        <label for="profileName">Full Name</label>
+                        <input type="text" id="profileName" name="profileName" placeholder="Enter your full name" required>
+                    </div>
 
-                <label for="profileEmail">Email:</label>
-                <input type="email" id="profileEmail" name="profileEmail" placeholder="you@example.com" required>
+                    <div class="form-group">
+                        <label for="profileEmail">Email Address</label>
+                        <input type="email" id="profileEmail" name="profileEmail" placeholder="you@example.com" required>
+                    </div>
 
-                <h3>Change Password (Optional)</h3>
-                <label for="currentPassword">Current Password:</label>
-                <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter current password">
+                    <div class="password-section">
+                        <h4>Change Password (Optional)</h4>
+                        
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter current password">
+                        </div>
 
-                <label for="newPassword">New Password:</label>
-                <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password">
+                        </div>
 
-                <label for="confirmNewPassword">Confirm New Password:</label>
-                <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm new password">
+                        <div class="form-group">
+                            <label for="confirmNewPassword">Confirm New Password</label>
+                            <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm new password">
+                        </div>
+                    </div>
 
-                <button type="submit">Update Profile</button>
-            </form>
+                    <button type="submit" class="profile-button">Update Profile</button>
+                </form>
+            </div>
         </section>
     </main>
 
-    <script src="js/auth.js"></script>
-    <script src="js/profile.js"></script>
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/profile.js?v=4"></script>
 </body>
 </html>
 

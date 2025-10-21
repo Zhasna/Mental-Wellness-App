@@ -4,25 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Mental Wellness Journal</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/auth.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/auth.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="auth-container">
-        <h1>Login</h1>
-        <form id="loginForm">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        <div class="auth-header">
+            <h1 class="nav-logo">Welcome Back</h1>
+            <p class="auth-subtitle">Sign in to your mental wellness journal</p>
+        </div>
+        
+        <form id="loginForm" class="auth-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="********" required>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
 
-            <button type="submit">Login</button>
+            <button type="submit" class="auth-button">Sign In</button>
         </form>
-        <p>Don't have an account? <a href="register.html">Register here</a></p>
+        
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="register.html" class="auth-link">Create one here</a></p>
+        </div>
     </div>
 
-    <script src="js/auth.js"></script>
+    <script src="js/auth.js?v=4"></script>
 </body>
 </html>

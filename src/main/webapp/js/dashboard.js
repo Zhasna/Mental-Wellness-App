@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // Get user ID from session storage
-    const userId = sessionStorage.getItem('userId') || '1'; // Default to 1 for testing
-    
+    if (!checkAuth()) return;
     try {
-        // Load dashboard statistics
-        const response = await fetch(`/MentalJournalApp/api/stats?userId=${userId}`);
+        // Load dashboard statistics (session-based)
+        const response = await fetch(`/MentalJournalApp/api/stats`);
         if (response.ok) {
             const stats = await response.json();
             
@@ -27,22 +25,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error('Failed to load dashboard stats');
         }
         
-        // Load recent entries
-        await loadRecentEntries(userId);
-        
-        // Load recent goals
-        await loadRecentGoals(userId);
+        // Load recent entries/goals
+        await loadRecentEntries();
+        await loadRecentGoals();
         
     } catch (error) {
         console.error('Error loading dashboard data:', error);
     }
 });
 
-async function loadRecentEntries(userId) {
+async function loadRecentEntries() {
     try {
-        const response = await fetch(`/MentalJournalApp/api/entries?userId=${userId}`);
+        const response = await fetch(`/MentalJournalApp/api/entries`);
         if (response.ok) {
-            const entries = await response.json();
+            let entries = await response.json();
+            // Exclude gratitude-tagged notes from dashboard recent entries
+            entries = entries.filter(e => !String(e.content || '').trim().toLowerCase().startsWith('[gratitude]'));
             const recentEntries = entries.slice(0, 5); // Get last 5 entries
             displayRecentEntries(recentEntries);
         }
@@ -51,9 +49,9 @@ async function loadRecentEntries(userId) {
     }
 }
 
-async function loadRecentGoals(userId) {
+async function loadRecentGoals() {
     try {
-        const response = await fetch(`/MentalJournalApp/api/goals?userId=${userId}`);
+        const response = await fetch(`/MentalJournalApp/api/goals`);
         if (response.ok) {
             const goals = await response.json();
             const recentGoals = goals.slice(0, 3); // Get last 3 goals
@@ -80,7 +78,7 @@ function displayRecentEntries(entries) {
         entryDiv.className = 'recent-entry';
         entryDiv.innerHTML = `
             <div class="entry-summary">
-                <span class="entry-date">${entry.date}</span>
+                <span class="entry-date">${entry.entryDate || entry.date}</span>
                 <span class="entry-mood">${getMoodEmoji(entry.mood)}</span>
             </div>
             <div class="entry-preview">${entry.content.substring(0, 100)}${entry.content.length > 100 ? '...' : ''}</div>
@@ -112,6 +110,8 @@ function displayRecentGoals(goals) {
 }
 
 function getMoodEmoji(mood) {
+    if (!mood) return '😐';
+    const m = String(mood).toLowerCase();
     const moodEmojis = {
         'happy': '😊',
         'sad': '😢',
@@ -119,8 +119,11 @@ function getMoodEmoji(mood) {
         'anxious': '😰',
         'calm': '😌',
         'tired': '😴',
-        'neutral': '😐'
+        'neutral': '😐',
+        'excited': '🤩',
+        'frustrated': '😤',
+        'peaceful': '🕊️'
     };
-    return moodEmojis[mood.toLowerCase()] || '😐';
+    return moodEmojis[m] || '😐';
 }
 

@@ -1,9 +1,11 @@
+com\journal\filters\SecurityHeadersFilter.class
 com\journal\dao\UserDAO.class
 com\journal\servlets\EntryServlet$1.class
 com\journal\dao\DBConnection.class
 com\journal\servlets\StatsServlet.class
 com\journal\servlets\RegisterServlet$1.class
 com\journal\dao\MoodDAO.class
+com\journal\filters\AuthFilter.class
 com\journal\servlets\RegisterServlet.class
 com\journal\servlets\GoalsServlet.class
 com\journal\servlets\ProfileServlet$1.class
@@ -25,4 +27,5 @@ com\journal\utils\PasswordUtils.class
 com\journal\dao\GoalDAO.class
 com\journal\models\Mood.class
 com\journal\servlets\MoodServlet.class
+com\journal\utils\JsonUtils.class
 com\journal\models\Goal.class

@@ -23,7 +23,8 @@ public class StatsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
@@ -50,8 +51,19 @@ public class StatsServlet extends HttpServlet {
         Map<String, Object> stats = new HashMap<>();
         
         try (Connection conn = DBConnection.getConnection()) {
-            // Total entries
-            String entriesSql = "SELECT COUNT(*) as count FROM entries WHERE user_id = ?";
+            // Get username
+            String userSql = "SELECT name FROM users WHERE id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(userSql)) {
+                ps.setLong(1, userId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        stats.put("username", rs.getString("name"));
+                    }
+                }
+            }
+            
+            // Total entries (exclude gratitude entries)
+            String entriesSql = "SELECT COUNT(*) as count FROM entries WHERE user_id = ? AND content NOT LIKE '[gratitude]%'";
             try (PreparedStatement ps = conn.prepareStatement(entriesSql)) {
                 ps.setLong(1, userId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -89,8 +101,8 @@ public class StatsServlet extends HttpServlet {
             int progress = totalGoals > 0 ? (completedGoals * 100) / totalGoals : 0;
             stats.put("goalsProgress", progress);
             
-            // Current mood (most recent)
-            String moodSql = "SELECT mood FROM moods WHERE user_id = ? ORDER BY logged_at DESC LIMIT 1";
+            // Current mood (most recent, exclude gratitude entries)
+            String moodSql = "SELECT mood FROM entries WHERE user_id = ? AND content NOT LIKE '[gratitude]%' ORDER BY created_at DESC LIMIT 1";
             try (PreparedStatement ps = conn.prepareStatement(moodSql)) {
                 ps.setLong(1, userId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -102,8 +114,8 @@ public class StatsServlet extends HttpServlet {
                 }
             }
             
-            // Mood distribution
-            String moodDistSql = "SELECT mood, COUNT(*) as count FROM moods WHERE user_id = ? GROUP BY mood";
+            // Mood distribution (exclude gratitude entries)
+            String moodDistSql = "SELECT mood, COUNT(*) as count FROM entries WHERE user_id = ? AND mood IS NOT NULL AND content NOT LIKE '[gratitude]%' GROUP BY mood";
             Map<String, Integer> moodDistribution = new HashMap<>();
             try (PreparedStatement ps = conn.prepareStatement(moodDistSql)) {
                 ps.setLong(1, userId);

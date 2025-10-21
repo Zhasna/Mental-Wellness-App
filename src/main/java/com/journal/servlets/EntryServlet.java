@@ -2,7 +2,6 @@ package com.journal.servlets;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.journal.dao.DBConnection;
 import com.journal.dao.EntryDAO;
 import com.journal.models.Entry;
 import com.journal.utils.SessionUtils;
@@ -23,7 +22,8 @@ public class EntryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
@@ -49,7 +49,8 @@ public class EntryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
@@ -105,7 +106,8 @@ public class EntryServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         try {
             Map<String, String> body = gson.fromJson(request.getReader(), 
@@ -131,7 +133,8 @@ public class EntryServlet extends HttpServlet {
             entry.setMood(mood);
             entry.setContent(content);
             
-            boolean updated = entryDAO.updateEntry(entry);
+            Long userId = SessionUtils.getUserId(request);
+            boolean updated = entryDAO.updateEntryOwned(userId, entry);
             if (updated) {
                 response.getWriter().write("{\"message\":\"Entry updated successfully\"}");
             } else {
@@ -157,7 +160,8 @@ public class EntryServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
         
         String entryIdParam = request.getParameter("entryId");
         if (entryIdParam == null) {
@@ -168,7 +172,8 @@ public class EntryServlet extends HttpServlet {
 
         try {
             Long entryId = Long.parseLong(entryIdParam);
-            boolean deleted = entryDAO.deleteEntry(entryId);
+            Long userId = SessionUtils.getUserId(request);
+            boolean deleted = entryDAO.deleteEntryOwned(userId, entryId);
             if (deleted) {
                 response.getWriter().write("{\"message\":\"Entry deleted successfully\"}");
             } else {
