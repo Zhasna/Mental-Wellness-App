@@ -4,30 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Mental Wellness Journal</title>
-    <link rel="stylesheet" href="css/style.css?v=3">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .about-hero {
+            background: linear-gradient(135deg, #FFE5E5 0%, #FFF0E6 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 20px rgba(255, 200, 200, 0.2);
+        }
+
+        .about-hero h1 {
+            font-size: 2.8rem;
+            color: #FF9A8B;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(255, 154, 139, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #FF9A8B;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .about-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .about-section h2 {
+            color: #FF9A8B;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .about-section p {
+            color: #555;
+            line-height: 1.9;
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .about-section ul li {
+            color: #555;
+            padding: 0.7rem 0;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .about-section ul li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #FF9A8B;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tech-badge {
+            background: linear-gradient(135deg, #FFE5E5, #FFF0E6);
+            color: #FF9A8B;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(255, 154, 139, 0.15);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #FF9A8B 0%, #FFB6A3 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 3rem;
+            box-shadow: 0 8px 20px rgba(255, 154, 139, 0.3);
+        }
+
+        .cta-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: #FF9A8B;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-hero p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>About This App</h1>
+        <div class="nav-logo">Mental Wellness</div>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="entries.html">Add Entry</a></li>
+                <li><a href="entries.html">Entries</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
                 <li><a href="stats.html">Stats</a></li>
                 <li><a href="goals.html">Goals</a></li>
+                <li><a href="meditation.html">Meditation</a></li>
+                <li><a href="gratitude.html">Gratitude Box</a></li>
                 <li><a href="profile.html">Profile</a></li>
+                <li><a href="about.html" class="active">About</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section class="about-section">
-            <h2>Welcome!</h2>
-            <p>This Mental Wellness Journal helps you track your moods, write daily entries, set goals, and visualize progress — all in a cozy lavender-themed interface.</p>
-            <p>Future updates will include cloud storage, analytics, and personalized insights.</p>
-        </section>
+        <div class="about-hero">
+            <h1>Mental Wellness Journal 🌸</h1>
+            <p>Your personal sanctuary for mindfulness, self-reflection, and growth. Track your mental health journey with beautiful, intuitive tools designed to bring peace and clarity to your daily life.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📔</div>
+                <h3>Daily Journaling</h3>
+                <p>Express yourself freely with mood-tagged entries. Track your emotions and thoughts over time to discover patterns and insights.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3>Calendar View</h3>
+                <p>Visualize your emotional journey at a glance. See mood emojis on each day and easily access past entries.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Mood Analytics</h3>
+                <p>Beautiful charts and statistics help you understand your emotional patterns and track your wellness progress.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Goal Tracking</h3>
+                <p>Set meaningful goals and track your progress. Celebrate achievements and stay motivated on your wellness journey.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧘</div>
+                <h3>Meditation Timer</h3>
+                <p>Guided meditation sessions with calming background sounds and gentle chime notifications to center your mind.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🍫</div>
+                <h3>Gratitude Box</h3>
+                <p>Collect moments of gratitude like chocolates in a box. Each entry becomes a sweet reminder of life's blessings.</p>
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>Why Mental Wellness Matters</h2>
+            <p>In today's fast-paced world, taking time to check in with yourself is more important than ever. This app is designed to be your daily companion on the journey to better mental health and emotional awareness.</p>
+            <p>Research shows that regular journaling, gratitude practice, and meditation can significantly improve mental well-being, reduce stress, and increase overall life satisfaction.</p>
+        </div>
+
+        <div class="about-section">
+            <h2>What Makes This App Special</h2>
+            <ul>
+                <li><strong>Beautiful, Calming Design:</strong> Soft pastel colors and smooth animations create a peaceful user experience</li>
+                <li><strong>Privacy First:</strong> Your data is securely stored and never shared with third parties</li>
+                <li><strong>Holistic Approach:</strong> Combines journaling, meditation, gratitude, and goal-setting in one place</li>
+                <li><strong>Data Visualization:</strong> See your progress through charts, trends, and insights</li>
+                <li><strong>Mobile Responsive:</strong> Access your journal anytime, anywhere on any device</li>
+                <li><strong>No Judgment Zone:</strong> Express yourself freely in a safe, supportive environment</li>
+            </ul>
+        </div>
+
+        <div class="about-section">
+            <h2>Built With Care</h2>
+            <p>This application was crafted using modern web technologies to ensure a smooth, reliable experience:</p>
+            <div class="tech-stack">
+                <span class="tech-badge">Java Servlets</span>
+                <span class="tech-badge">HTML5 & CSS3</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">H2 Database</span>
+                <span class="tech-badge">Maven</span>
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">Render Cloud</span>
+                <span class="tech-badge">Responsive Design</span>
+            </div>
+        </div>
+
+        <div class="about-section">
+            <h2>Your Wellness Journey Starts Here</h2>
+            <p>Whether you're managing stress, processing emotions, building healthy habits, or simply wanting to be more mindful, this app provides the tools you need to:</p>
+            <ul>
+                <li>Develop self-awareness through consistent journaling</li>
+                <li>Identify emotional patterns and triggers</li>
+                <li>Practice gratitude and positive thinking</li>
+                <li>Set and achieve meaningful personal goals</li>
+                <li>Build a sustainable meditation practice</li>
+                <li>Track your progress over time</li>
+                <li>Create a safe space for self-expression</li>
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Begin?</h2>
+            <p>Start your mental wellness journey today. Your future self will thank you.</p>
+            <a href="dashboard.html" class="cta-button">Go to Dashboard</a>
+        </div>
     </main>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
-

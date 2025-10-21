@@ -1,6 +1,6 @@
 # Mental Wellness Journal App
 
-🌐 **Live Demo:** https://mental-wellness-app-xg4t.onrender.com
+🌐 **Live Demo:** [https://mental-wellness-app-xg4t.onrender.com](https://mental-wellness-app-xg4t.onrender.com)
 
 A beautiful, calming web application for tracking your mental wellness journey.
 
@@ -133,12 +133,17 @@ http://localhost:8080
 
 ### Deploy to Render
 
-See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for complete deployment guide.
-
 **Quick Deploy:**
-1. Push code to GitHub
-2. Create Blueprint on Render using `render.yaml`
-3. Auto-deploys in 5-10 minutes!
+1. Push your code to GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com)
+3. Click **"New +"** → **"Blueprint"**
+4. Connect your GitHub repository
+5. Render will detect `render.yaml` and auto-deploy!
+6. Wait 5-10 minutes for build to complete
+7. Access your app at the provided URL
+
+**Important Environment Variable:**
+- Set `DB_PATH=/opt/render/project/data/mental_journal` in Render dashboard for persistent database storage
 
 ---
 
@@ -163,8 +168,8 @@ Mental_Wellness_JournalApp/
 │   └── MentalJournalApp.war  # Deployable artifact
 ├── Dockerfile                # Docker configuration
 ├── render.yaml               # Render deployment config
-├── pom.xml                   # Maven configuration
-└── DEPLOYMENT.md             # Deployment guide
+├── startup.sh                # Docker startup script
+└── pom.xml                   # Maven configuration
 ```
 
 ---
