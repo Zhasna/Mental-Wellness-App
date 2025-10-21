@@ -16,11 +16,22 @@ document.getElementById('loginForm')?.addEventListener('submit', async e => {
     }
 
     try {
-        const res = await fetch('/MentalJournalApp/api/login', {
+        const res = await fetch('/api/login', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({email, password})
         });
+        
+        // Check if response is JSON
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await res.text();
+            console.error('Non-JSON response:', text);
+            console.error('Status:', res.status, res.statusText);
+            alert('Server error (Status ' + res.status + '). Check console for details.');
+            return;
+        }
+        
         const data = await res.json();
         
         if(res.ok){
@@ -32,11 +43,11 @@ document.getElementById('loginForm')?.addEventListener('submit', async e => {
             // Redirect to dashboard
             window.location.href = 'dashboard.html';
         } else {
-            alert(data.message);
+            alert(data.message || 'Login failed');
         }
     } catch(err){
-        console.error(err);
-        alert('Login failed. Please try again.');
+        console.error('Login error:', err);
+        alert('Login failed: ' + err.message);
     }
 });
 
@@ -94,11 +105,22 @@ document.getElementById('registerForm')?.addEventListener('submit', async e => {
 
     try {
         console.log('Sending registration request...');
-        const res = await fetch('/MentalJournalApp/api/register', {
+        const res = await fetch('/api/register', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({username: name, email, password})
         });
+        
+        // Check if response is JSON
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await res.text();
+            console.error('Non-JSON response:', text);
+            console.error('Status:', res.status, res.statusText);
+            alert('Server error (Status ' + res.status + '). Check console for details.');
+            return;
+        }
+        
         const data = await res.json();
         console.log('Registration response:', data);
         alert(data.message);
@@ -108,7 +130,7 @@ document.getElementById('registerForm')?.addEventListener('submit', async e => {
         }
     } catch(err){
         console.error('Registration error:', err);
-        alert('Registration failed. Please try again.');
+        alert('Registration failed: ' + err.message);
     }
 });
 
