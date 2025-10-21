@@ -16,8 +16,9 @@ async function renderBox() {
         c.title = (n.date || '').substring(0,10);
         c.dataset.date = (n.date || '').substring(0,10);
         c.dataset.text = n.text || n.content || '';
+        c.dataset.id = n.id;
         c.innerHTML = `<div class="hint">${truncate(c.dataset.text, 28)}</div>`;
-        c.addEventListener('click', () => openGratDrawer(c.dataset.date, c.dataset.text));
+        c.addEventListener('click', () => openGratDrawer(c.dataset.id, c.dataset.date, c.dataset.text));
         cup.appendChild(c);
         grid.appendChild(cup);
     });
@@ -55,6 +56,7 @@ async function fetchGratitudes() {
             const isTag = text.toLowerCase().startsWith('[gratitude]');
             return isTag;
         }).map(e => ({
+            id: e.id,
             date: (e.entryDate || e.date || '').substring(0,10),
             text: (e.content || '').replace(/^\[gratitude\]\s*/i, '')
         }));
@@ -65,16 +67,121 @@ async function fetchGratitudes() {
     }
 }
 
-function openGratDrawer(dateStr, text) {
+function openGratDrawer(id, dateStr, text) {
     const drawer = document.getElementById('gratDrawer');
     const backdrop = document.getElementById('gratBackdrop');
     const dateRow = `<div class="drawer-date"><span>📅</span><span>${new Date(dateStr).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>`;
     const quote = `<div class="drawer-quote">"Gratitude turns what we have into enough."</div>`;
-    document.getElementById('gratContent').innerHTML = `<div class="drawer-entry">${escapeHtml(text)}</div>${dateRow}${quote}`;
+    const actions = `
+        <div class="drawer-actions">
+            <button class="edit-btn" onclick="editGratitude(${id}, '${escapeForJs(text)}')">✏️ Edit</button>
+            <button class="delete-btn" onclick="deleteGratitude(${id})">🗑️ Delete</button>
+        </div>
+    `;
+    document.getElementById('gratContent').innerHTML = `<div class="drawer-entry">${escapeHtml(text)}</div>${dateRow}${quote}${actions}`;
     drawer.classList.add('open');
     backdrop.classList.add('open');
     document.getElementById('closeGrat').onclick = closeGratDrawer;
     backdrop.onclick = closeGratDrawer;
+}
+
+function escapeForJs(text) {
+    return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n');
+}
+
+async function editGratitude(id, text) {
+    closeGratDrawer();
+    const input = document.getElementById('gratInput');
+    const btn = document.getElementById('gratAddBtn');
+    
+    // Populate input with current text
+    input.value = text;
+    input.focus();
+    
+    // Change button text and style
+    const originalText = btn.textContent;
+    btn.textContent = 'Update';
+    btn.style.background = 'linear-gradient(135deg, #FFA07A 0%, #FF8C69 100%)';
+    
+    // Create cancel button if it doesn't exist
+    let cancelBtn = document.getElementById('cancelGratBtn');
+    if (!cancelBtn) {
+        cancelBtn = document.createElement('button');
+        cancelBtn.id = 'cancelGratBtn';
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.className = 'cancel-btn';
+        cancelBtn.style.cssText = 'padding: 0.9rem 1.25rem; margin-left: 0.5rem; border: 2px solid var(--accent-color); border-radius: 999px; background: transparent; color: var(--accent-color); cursor: pointer; transition: all 0.3s;';
+        btn.parentNode.appendChild(cancelBtn);
+    }
+    
+    // Cancel handler
+    const resetForm = () => {
+        input.value = '';
+        btn.textContent = originalText;
+        btn.style.background = '';
+        if (cancelBtn) cancelBtn.remove();
+        btn.onclick = null;
+    };
+    
+    cancelBtn.onclick = resetForm;
+    
+    // Update handler
+    btn.onclick = async () => {
+        const updatedText = input.value.trim();
+        if (!updatedText) return;
+        
+        try {
+            const today = new Date();
+            const y = today.getFullYear();
+            const m = String(today.getMonth()+1).padStart(2,'0');
+            const d = String(today.getDate()).padStart(2,'0');
+            const payload = { 
+                entryId: id.toString(), 
+                date: `${y}-${m}-${d}`, 
+                mood: 'peaceful', 
+                content: `[gratitude] ${updatedText}` 
+            };
+            
+            const res = await fetch('/api/entries', { 
+                method: 'PUT', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(payload) 
+            });
+            
+            if (res.ok) {
+                resetForm();
+                await renderBox();
+                alert('Gratitude updated successfully!');
+            } else {
+                alert('Failed to update gratitude');
+            }
+        } catch(e) { 
+            console.error('Failed to update gratitude', e); 
+            alert('Error updating gratitude');
+        }
+    };
+}
+
+async function deleteGratitude(id) {
+    if (!confirm('Are you sure you want to delete this gratitude? This action cannot be undone.')) {
+        return;
+    }
+    
+    closeGratDrawer();
+    
+    try {
+        const res = await fetch(`/api/entries?entryId=${id}`, { method: 'DELETE' });
+        
+        if (res.ok) {
+            await renderBox();
+            alert('Gratitude deleted successfully!');
+        } else {
+            alert('Failed to delete gratitude');
+        }
+    } catch(e) { 
+        console.error('Failed to delete gratitude', e); 
+        alert('Error deleting gratitude');
+    }
 }
 
 function closeGratDrawer() {

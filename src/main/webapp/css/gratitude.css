@@ -49,6 +49,14 @@
 .drawer-date { display: flex; align-items: center; gap: 8px; color: #9a6a2f; margin: 0.75rem 0 1rem; font-weight: 500; }
 .drawer-quote { font-style: italic; color: #8a6a55; background: #fff3e2; border: 1px dashed rgba(203,140,0,0.35); padding: 0.75rem 1rem; border-radius: 10px; }
 
+.drawer-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(232, 180, 184, 0.15);
+}
+
 .drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.2); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 900; }
 .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
 

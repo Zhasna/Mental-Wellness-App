@@ -119,10 +119,132 @@ function displayEntries(entries) {
                 <span class="entry-date">${entry.entryDate || entry.date}</span>
                 <span class="entry-mood">${getMoodEmoji(entry.mood)}</span>
             </div>
-            <div class="entry-content">${entry.content}</div>
+            <div class="entry-content">${escapeHtml(entry.content)}</div>
+            <div class="entry-actions">
+                <button class="edit-btn" onclick="editEntry(${entry.id}, '${(entry.entryDate || entry.date)}', '${entry.mood}', \`${escapeForAttribute(entry.content)}\`)">✏️ Edit</button>
+                <button class="delete-btn" onclick="deleteEntry(${entry.id})">🗑️ Delete</button>
+            </div>
         `;
         entriesContainer.appendChild(entryDiv);
     });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function escapeForAttribute(text) {
+    return text.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/\n/g, '\\n');
+}
+
+async function editEntry(id, date, mood, content) {
+    // Populate the form with the entry data
+    document.getElementById('date').value = date;
+    document.getElementById('mood').value = mood;
+    document.getElementById('entry').value = content;
+    
+    // Change the form submission behavior
+    const form = document.getElementById('journalForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Update Entry';
+    submitBtn.style.background = 'linear-gradient(135deg, #FFA07A 0%, #FF8C69 100%)';
+    
+    // Create cancel button if it doesn't exist
+    let cancelBtn = document.getElementById('cancelEditBtn');
+    if (!cancelBtn) {
+        cancelBtn = document.createElement('button');
+        cancelBtn.id = 'cancelEditBtn';
+        cancelBtn.type = 'button';
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.className = 'cancel-btn';
+        submitBtn.parentNode.appendChild(cancelBtn);
+    }
+    
+    cancelBtn.onclick = () => {
+        form.reset();
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = '';
+        cancelBtn.remove();
+        form.onsubmit = null;
+        // Restore original form handler
+        location.reload();
+    };
+    
+    // Override form submission
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const updatedDate = document.getElementById('date').value;
+        const updatedMood = document.getElementById('mood').value;
+        const updatedContent = document.getElementById('entry').value;
+        
+        if (!updatedDate || !updatedMood || !updatedContent.trim()) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/api/entries', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    entryId: id.toString(),
+                    date: updatedDate,
+                    mood: updatedMood,
+                    content: updatedContent.trim()
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                alert('Entry updated successfully!');
+                form.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = '';
+                cancelBtn.remove();
+                form.onsubmit = null;
+                loadUserEntries();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to update entry. Please try again.');
+        }
+    };
+    
+    // Scroll to form
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function deleteEntry(id) {
+    if (!confirm('Are you sure you want to delete this entry? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/entries?entryId=${id}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert('Entry deleted successfully!');
+            loadUserEntries();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to delete entry. Please try again.');
+    }
 }
 
 function getMoodEmoji(mood) {
