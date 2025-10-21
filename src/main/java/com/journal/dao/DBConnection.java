@@ -8,15 +8,30 @@ import java.sql.SQLException;
 public class DBConnection {
     // Use environment variable for DB path if available (for Render deployment)
     // Otherwise default to local ./data directory
-    private static final String DB_PATH = System.getenv("DB_PATH") != null 
-        ? System.getenv("DB_PATH") 
-        : "./data/mental_journal";
+    private static final String DB_PATH;
+    
+    static {
+        String envPath = System.getenv("DB_PATH");
+        System.out.println("=== DATABASE CONFIGURATION ===");
+        System.out.println("DB_PATH environment variable: " + (envPath != null ? envPath : "NOT SET"));
+        
+        if (envPath != null && !envPath.trim().isEmpty()) {
+            DB_PATH = envPath;
+            System.out.println("Using environment DB path: " + DB_PATH);
+        } else {
+            DB_PATH = "./data/mental_journal";
+            System.out.println("WARNING: DB_PATH not set, using default: " + DB_PATH);
+            System.out.println("This will NOT persist on Render! Set DB_PATH environment variable.");
+        }
+        System.out.println("==============================");
+    }
     private static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH + ";AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE";
     private static final String USER = "sa";
     private static final String PASS = "";
     private static boolean driverLoaded = false;
 
     static {
+        System.out.println("Loading H2 Driver...");
         try {
             // Load the H2 driver
             Class.forName("org.h2.Driver");
