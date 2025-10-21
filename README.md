@@ -1,6 +1,6 @@
-# 🍑 Mental Wellness Journal App
+# Mental Wellness Journal App
 
-A beautiful, calming web application for tracking your mental wellness journey with a soft peach aesthetic.
+A beautiful, calming web application for tracking your mental wellness journey.
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Tomcat](https://img.shields.io/badge/Tomcat-10.1-yellow)
@@ -285,6 +285,6 @@ For questions or support, please open an issue on GitHub.
 
 ---
 
-**Made with 🍑 and ❤️**
+**Made with ❤️**
 
 *A calming space for your mental wellness journey*

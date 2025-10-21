@@ -26,7 +26,7 @@ public class RegisterServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         
         try {
-            System.out.println("RegisterServlet: POST /api/register");
+            System.out.println("=== RegisterServlet: POST /api/register ===");
 
             Map<String, String> body = gson.fromJson(request.getReader(),
                 new TypeToken<Map<String, String>>(){}.getType());
@@ -34,6 +34,8 @@ public class RegisterServlet extends HttpServlet {
             String username = body.get("username");
             String email = body.get("email");
             String password = body.get("password");
+            
+            System.out.println("Register attempt - Email: " + email + ", Username: " + username);
 
             if (username == null || email == null || password == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -70,13 +72,17 @@ public class RegisterServlet extends HttpServlet {
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
+                    System.out.println("✓ User registered successfully: " + email);
                     response.getWriter().write("{\"message\":\"User registered successfully\"}");
                 } else {
+                    System.err.println("✗ Registration failed - no rows affected");
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     response.getWriter().write("{\"message\":\"Failed to register user\"}");
                 }
             }
         } catch (SQLException e) {
+            System.err.println("✗ SQL Error during registration: " + e.getMessage());
+            e.printStackTrace();
             if (e.getSQLState() != null && e.getSQLState().equals("23505")) { // Unique constraint violation
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
                 response.getWriter().write("{\"message\":\"Email already exists\"}");
@@ -85,6 +91,8 @@ public class RegisterServlet extends HttpServlet {
                 response.getWriter().write("{\"message\":\"Database error: " + e.getMessage() + "\"}");
             }
         } catch (Exception e) {
+            System.err.println("✗ General error during registration: " + e.getMessage());
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\":\"Error: " + e.getMessage() + "\"}");
         }

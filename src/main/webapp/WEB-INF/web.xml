@@ -79,7 +79,8 @@
         <session-timeout>30</session-timeout> <!-- 30 minutes -->
         <cookie-config>
             <http-only>true</http-only>
-            <secure>true</secure>
+            <!-- Set secure to false for Render - they handle HTTPS at load balancer level -->
+            <secure>false</secure>
             <name>MWJSESSIONID</name>
         </cookie-config>
     </session-config>
