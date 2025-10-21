@@ -89,12 +89,18 @@ public class LoginServlet extends HttpServlet {
                             // Set session timeout to 30 minutes
                             session.setMaxInactiveInterval(30 * 60);
                             
-                            response.getWriter().write(gson.toJson(Map.of(
-                                "message", "Login successful",
-                                "userId", rs.getLong("id"),
-                                "username", rs.getString("name"),
-                                "email", rs.getString("email")
-                            )));
+                            // Create response JSON manually to avoid type issues
+                            Long userId = rs.getLong("id");
+                            String userName = rs.getString("name");
+                            String userEmail = rs.getString("email");
+                            
+                            String jsonResponse = String.format(
+                                "{\"message\":\"Login successful\",\"userId\":%d,\"username\":\"%s\",\"email\":\"%s\"}",
+                                userId,
+                                userName.replace("\"", "\\\""),
+                                userEmail.replace("\"", "\\\"")
+                            );
+                            response.getWriter().write(jsonResponse);
                         } else {
                             // record failed attempt
                             ATTEMPTS.compute(clientKey, (k, q) -> {
