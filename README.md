@@ -1,30 +1,35 @@
-# Mental Wellness Journal App
+**Mental Wellness Journal App**
+--
+A web application for mental wellness - track moods, log daily entries, set and manage goals, practice guided meditation, and reflect using an interactive gratitude box.
 
-A simple Jakarta Servlet-based web app for journaling, goals and mood tracking, backed by H2.
+Features
+---
+**Mood Tracking:** Log daily moods and visualize trends over time.
 
-## Tech
-- Java 17, Maven, Jakarta Servlet 6
-- H2 embedded database
-- Gson, BCrypt
+**Journaling:** Add and review personal entries.
 
-## Setup
-1. Ensure Java 17 and Maven are installed.
-2. Build:
-```bash
-mvn clean package
-```
-3. Run on a Servlet container supporting Jakarta 6 (e.g., Tomcat 10.1+). Deploy the generated WAR from `target/MentalJournalApp.war`.
+**Goals:** Create, track, and mark goals as complete.
 
-## Configuration
-- Database stored under `./data/mental_journal` relative to working dir.
-- Session cookies are HttpOnly and Secure by default (requires HTTPS to send cookies).
+**Meditation:** Access guided meditation sessions.
 
-## Project Structure
-- `src/main/webapp` static assets and HTML
-- `src/main/java` DAOs, models, servlets, utils
+**Gratitude Box:** Write and interact with gratitude notes through a chocolate-box interface.
 
-## Notes
-- Users table uses `password_hash` for BCrypt hashes.
-- API endpoints under `/api/*` as configured in `WEB-INF/web.xml`.
-- Security: global security headers filter and auth filter (rate limited login). Sessions are HttpOnly/Secure cookies.
-- UI: cat-themed styling using CSS variables; header and badges updated with paw icons.
+**Statistics Dashboard:** View mood distribution, number of entries, and goal progress in a structured interface.
+
+Tech Stack
+--
+**Backend:** Java 17, Jakarta Servlet 6, Maven
+
+**Database:** H2 embedded database
+
+**Utilities:** Gson, BCrypt for secure password handling
+
+**Frontend:** HTML, CSS, JavaScript
+
+UI & Design
+--
+Clean, minimal, and calming aesthetic for all pages
+
+Responsive layout for desktop and mobile
+
+Interactive components for mood entries, goals, and gratitude box
