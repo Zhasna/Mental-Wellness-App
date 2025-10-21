@@ -1,5 +1,7 @@
 # Mental Wellness Journal App
 
+🌐 **Live Demo:** https://mental-wellness-app-xg4t.onrender.com
+
 A beautiful, calming web application for tracking your mental wellness journey.
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
