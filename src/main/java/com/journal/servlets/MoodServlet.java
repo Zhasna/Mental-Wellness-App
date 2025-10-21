@@ -70,7 +70,11 @@ public class MoodServlet extends HttpServlet {
             mood.setMood(moodType);
             
             Long moodId = moodDAO.createMood(mood);
-            response.getWriter().write("{\"message\":\"Mood recorded successfully\", \"moodId\":" + moodId + "}");
+            String jsonResponse = String.format(
+                "{\"message\":\"Mood recorded successfully\",\"moodId\":%d}",
+                moodId
+            );
+            response.getWriter().write(jsonResponse);
             
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -26,6 +26,8 @@ public class StatsServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         
+        System.out.println("=== StatsServlet: GET /api/stats ===");
+        
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
             return;

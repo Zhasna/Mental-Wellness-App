@@ -26,6 +26,8 @@ public class ProfileServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         
+        System.out.println("=== ProfileServlet: GET /api/profile ===");
+        
         // Require authenticated session and use server-side userId
         Long sessionUserId = com.journal.utils.SessionUtils.getUserId(request);
         if (sessionUserId == null) {

@@ -27,6 +27,8 @@ public class GoalsServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         
+        System.out.println("=== GoalsServlet: GET /api/goals ===");
+        
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
             return;
@@ -53,6 +55,8 @@ public class GoalsServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
+        
+        System.out.println("=== GoalsServlet: POST /api/goals ===");
         
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
@@ -89,15 +93,24 @@ public class GoalsServlet extends HttpServlet {
             }
             
             Long goalId = goalDAO.createGoal(goal);
-            response.getWriter().write("{\"message\":\"Goal created successfully\", \"goalId\":" + goalId + "}");
+            System.out.println("✓ Goal created successfully - ID: " + goalId);
+            String jsonResponse = String.format(
+                "{\"message\":\"Goal created successfully\",\"goalId\":%d}",
+                goalId
+            );
+            response.getWriter().write(jsonResponse);
             
         } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"message\":\"Invalid date format. Use YYYY-MM-DD\"}");
         } catch (SQLException e) {
+            System.err.println("✗ SQL Error creating goal: " + e.getMessage());
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\":\"Database error: " + e.getMessage() + "\"}");
         } catch (Exception e) {
+            System.err.println("✗ General error creating goal: " + e.getMessage());
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\":\"Error: " + e.getMessage() + "\"}");
         }

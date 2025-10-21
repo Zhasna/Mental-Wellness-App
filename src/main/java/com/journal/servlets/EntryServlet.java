@@ -25,24 +25,38 @@ public class EntryServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         
+        System.out.println("=== EntryServlet: GET /api/entries ===");
+        
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
+            System.err.println("Session validation failed");
             return;
         }
         
         Long userId = SessionUtils.getUserId(request);
         if (userId == null) {
+            System.err.println("User ID is null");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"message\":\"User ID is required\"}");
             return;
         }
+        
+        System.out.println("Fetching entries for user ID: " + userId);
 
         try {
             List<Entry> entries = entryDAO.findByUserId(userId);
+            System.out.println("Found " + entries.size() + " entries");
             response.getWriter().write(gson.toJson(entries));
         } catch (SQLException e) {
+            System.err.println("SQL Error fetching entries: " + e.getMessage());
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\":\"Database error: " + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            System.err.println("General error fetching entries: " + e.getMessage());
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"message\":\"Error: " + e.getMessage() + "\"}");
         }
     }
 
@@ -52,8 +66,11 @@ public class EntryServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         
+        System.out.println("=== EntryServlet: POST /api/entries ===");
+        
         // Validate session
         if (!SessionUtils.validateSession(request, response)) {
+            System.err.println("Session validation failed");
             return;
         }
         
@@ -89,15 +106,24 @@ public class EntryServlet extends HttpServlet {
             entry.setContent(content);
             
             Long entryId = entryDAO.createEntry(entry);
-            response.getWriter().write("{\"message\":\"Entry created successfully\", \"entryId\":" + entryId + "}");
+            System.out.println("✓ Entry created successfully - ID: " + entryId + ", User: " + userId);
+            String jsonResponse = String.format(
+                "{\"message\":\"Entry created successfully\",\"entryId\":%d}",
+                entryId
+            );
+            response.getWriter().write(jsonResponse);
             
         } catch (IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"message\":\"Invalid date format. Use YYYY-MM-DD\"}");
         } catch (SQLException e) {
+            System.err.println("✗ SQL Error creating entry: " + e.getMessage());
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\":\"Database error: " + e.getMessage() + "\"}");
         } catch (Exception e) {
+            System.err.println("✗ General error creating entry: " + e.getMessage());
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\":\"Error: " + e.getMessage() + "\"}");
         }
