@@ -1,5 +1,5 @@
 # Maven
-/target/
+#/target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -60,8 +60,8 @@ secrets.json
 
 # Generated/exploded WAR or duplicates
 /src/MentalJournalApp/
-/MentalJournalApp.war
-*.war
+#/MentalJournalApp.war
+#*.war
 *.ear
 *.jar
 !maven-wrapper.jar

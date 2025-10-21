@@ -1,21 +1,15 @@
-# Use Maven + JDK 17 image to build
-FROM maven:3.9.4-eclipse-temurin-17 AS build
-
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-
-# Build WAR without running tests
-RUN mvn clean package -DskipTests
-
-# Use Tomcat image to run WAR
+# Use official Tomcat 10 with Java 17
 FROM tomcat:10.1-jdk17
 
-# Remove default ROOT
+# Remove default ROOT webapp
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy WAR from build stage
-COPY --from=build /app/target/MentalJournalApp.war /usr/local/tomcat/webapps/ROOT.war
+# Copy WAR from repo (already committed)
+COPY target/MentalJournalApp.war /usr/local/tomcat/webapps/ROOT.war
 
+# Expose Tomcat port
 EXPOSE 8080
+
+# Start Tomcat
 CMD ["catalina.sh", "run"]
+
