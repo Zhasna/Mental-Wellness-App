@@ -44,7 +44,7 @@ public class DBConnection {
             // users table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS users (
-                  id IDENTITY PRIMARY KEY,
+                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                   name VARCHAR(255),
                   email VARCHAR(255) UNIQUE,
                   password_hash VARCHAR(255),
@@ -64,7 +64,7 @@ public class DBConnection {
             // entries table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS entries (
-                  id IDENTITY PRIMARY KEY,
+                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                   user_id BIGINT,
                   entry_date DATE,
                   mood VARCHAR(50),
@@ -77,7 +77,7 @@ public class DBConnection {
             // goals table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS goals (
-                  id IDENTITY PRIMARY KEY,
+                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                   user_id BIGINT,
                   title VARCHAR(255),
                   description TEXT,
@@ -91,7 +91,7 @@ public class DBConnection {
             // moods table
             st.executeUpdate("""
                 CREATE TABLE IF NOT EXISTS moods (
-                  id IDENTITY PRIMARY KEY,
+                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
                   user_id BIGINT,
                   mood VARCHAR(50),
                   logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
