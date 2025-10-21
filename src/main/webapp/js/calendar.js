@@ -96,7 +96,7 @@ async function renderCalendar() {
 async function fetchMoodMap(year, monthIndexZeroBased) {
     try {
         // Fetch all entries, then filter by month client-side for simplicity
-        const res = await fetch('/MentalJournalApp/api/entries');
+        const res = await fetch('/api/entries');
         if (!res.ok) return {};
         const entries = await res.json();
         const month = monthIndexZeroBased + 1; // 1-12
@@ -169,7 +169,7 @@ async function fetchEntriesByDate(dateStr) {
     try {
         // Assuming an endpoint exists to fetch entries for a specific date
         // If not, fetch all and filter
-        const res = await fetch('/MentalJournalApp/api/entries');
+        const res = await fetch('/api/entries');
         if (!res.ok) return [];
         let entries = await res.json();
         // Exclude gratitude-tagged notes from calendar day entries

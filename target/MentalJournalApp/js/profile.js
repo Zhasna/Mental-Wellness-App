@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!checkAuth()) return;
     try {
         // Load user profile (session-based)
-        const response = await fetch(`/MentalJournalApp/api/profile`);
+        const response = await fetch(`/api/profile`);
         if (response.ok) {
             const user = await response.json();
             populateProfile(user);
@@ -67,7 +67,7 @@ async function updateProfile(e) {
             updateData.newPassword = newPassword;
         }
         
-        const response = await fetch('/MentalJournalApp/api/profile', {
+        const response = await fetch('/api/profile', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

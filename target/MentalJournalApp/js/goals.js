@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                const response = await fetch('/MentalJournalApp/api/goals', {
+                const response = await fetch('/api/goals', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadGoals() {
     try {
-        const response = await fetch(`/MentalJournalApp/api/goals`);
+        const response = await fetch(`/api/goals`);
         if (response.ok) {
             const goals = await response.json();
             displayGoals(goals);
@@ -109,7 +109,7 @@ function displayGoals(goals) {
 async function toggleGoal(goalId, completed) {
     console.log('toggleGoal called with:', goalId, completed);
     try {
-        const response = await fetch('/MentalJournalApp/api/goals', {
+        const response = await fetch('/api/goals', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ async function deleteGoal(goalId) {
     }
 
     try {
-        const response = await fetch(`/MentalJournalApp/api/goals?goalId=${goalId}`, {
+        const response = await fetch(`/api/goals?goalId=${goalId}`, {
             method: 'DELETE'
         });
 
@@ -223,13 +223,13 @@ async function saveGoalEdit(goalId) {
     try {
         // For now, we'll delete the old goal and create a new one
         // This is a workaround since the servlet doesn't support full updates
-        const deleteResponse = await fetch(`/MentalJournalApp/api/goals?goalId=${goalId}`, {
+        const deleteResponse = await fetch(`/api/goals?goalId=${goalId}`, {
             method: 'DELETE'
         });
         
         if (deleteResponse.ok) {
             // Create new goal with updated content
-            const createResponse = await fetch('/MentalJournalApp/api/goals', {
+            const createResponse = await fetch('/api/goals', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

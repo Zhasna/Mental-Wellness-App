@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     try {
         // Load dashboard statistics
-        const response = await fetch(`/MentalJournalApp/api/stats`);
+        const response = await fetch(`/api/stats`);
         if (response.ok) {
             const stats = await response.json();
             

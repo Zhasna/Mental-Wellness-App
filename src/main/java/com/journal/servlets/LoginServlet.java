@@ -31,11 +31,15 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         
         try {
+            System.out.println("=== LoginServlet: POST /api/login ===");
+            
             Map<String, String> body = gson.fromJson(request.getReader(), 
                 new TypeToken<Map<String, String>>(){}.getType());
             
             String email = body.get("email");
             String password = body.get("password");
+            
+            System.out.println("Login attempt for email: " + email);
             
             // Simple rate limiting by client IP
             String clientKey = request.getRemoteAddr();
@@ -71,8 +75,13 @@ public class LoginServlet extends HttpServlet {
                 ps.setString(1, email);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
+                        System.out.println("User found in database: " + email);
                         String hashedPassword = rs.getString("password_hash");
-                        if (PasswordUtils.verifyPassword(password, hashedPassword)) {
+                        System.out.println("Verifying password...");
+                        boolean passwordMatch = PasswordUtils.verifyPassword(password, hashedPassword);
+                        System.out.println("Password match: " + passwordMatch);
+                        
+                        if (passwordMatch) {
                             // reset attempts on success
                             java.util.Deque<Long> q = ATTEMPTS.get(clientKey);
                             if (q != null) q.clear();
@@ -100,8 +109,10 @@ public class LoginServlet extends HttpServlet {
                                 userName.replace("\"", "\\\""),
                                 userEmail.replace("\"", "\\\"")
                             );
+                            System.out.println("✓ Login successful for: " + email);
                             response.getWriter().write(jsonResponse);
                         } else {
+                            System.err.println("✗ Password verification failed for: " + email);
                             // record failed attempt
                             ATTEMPTS.compute(clientKey, (k, q) -> {
                                 if (q == null) q = new java.util.ArrayDeque<>();
@@ -112,6 +123,7 @@ public class LoginServlet extends HttpServlet {
                             response.getWriter().write("{\"message\":\"Invalid credentials\"}");
                         }
                     } else {
+                        System.err.println("✗ User not found in database: " + email);
                         // record failed attempt
                         ATTEMPTS.compute(clientKey, (k, q) -> {
                             if (q == null) q = new java.util.ArrayDeque<>();

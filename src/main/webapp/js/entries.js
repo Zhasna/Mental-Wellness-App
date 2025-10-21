@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                const response = await fetch('/MentalJournalApp/api/entries', {
+                const response = await fetch('/api/entries', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -53,6 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         content: entry.trim()
                     })
                 });
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    console.error('Non-JSON response:', text);
+                    console.error('Status:', response.status, response.statusText);
+                    alert('Server error (Status ' + response.status + '). Check console for details.');
+                    return;
+                }
 
                 const data = await response.json();
                 
@@ -76,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadUserEntries() {
     try {
-        const response = await fetch(`/MentalJournalApp/api/entries`);
+        const response = await fetch(`/api/entries`);
         if (response.ok) {
             let entries = await response.json();
             // Exclude gratitude-tagged notes from regular entries

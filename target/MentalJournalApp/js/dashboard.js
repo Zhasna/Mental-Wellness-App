@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!checkAuth()) return;
     try {
         // Load dashboard statistics (session-based)
-        const response = await fetch(`/MentalJournalApp/api/stats`);
+        const response = await fetch(`/api/stats`);
         if (response.ok) {
             const stats = await response.json();
             
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function loadRecentEntries() {
     try {
-        const response = await fetch(`/MentalJournalApp/api/entries`);
+        const response = await fetch(`/api/entries`);
         if (response.ok) {
             let entries = await response.json();
             // Exclude gratitude-tagged notes from dashboard recent entries
@@ -51,7 +51,7 @@ async function loadRecentEntries() {
 
 async function loadRecentGoals() {
     try {
-        const response = await fetch(`/MentalJournalApp/api/goals`);
+        const response = await fetch(`/api/goals`);
         if (response.ok) {
             const goals = await response.json();
             const recentGoals = goals.slice(0, 3); // Get last 3 goals

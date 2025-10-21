@@ -46,7 +46,7 @@ async function fetchGratitudes() {
     try {
         // Reuse entries API: treat entries with mood 'peaceful' and short content as gratitude? Better: dedicated endpoint if exists.
         // For now, look for entries tagged via a convention: content starting with "[gratitude]" or mood == 'peaceful'.
-        const res = await fetch('/MentalJournalApp/api/entries');
+        const res = await fetch('/api/entries');
         if (!res.ok) return [];
         const entries = await res.json();
         // Only include entries explicitly tagged as gratitude to avoid overlap with normal journal entries
@@ -102,7 +102,7 @@ function bindAddControls(){
         const d = String(today.getDate()).padStart(2,'0');
         const payload = { date: `${y}-${m}-${d}`, mood: 'peaceful', content: `[gratitude] ${text}` };
         try {
-            const res = await fetch('/MentalJournalApp/api/entries', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            const res = await fetch('/api/entries', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             if (res.ok){
                 input.value='';
                 // Re-render with a drop-in animation for last node
