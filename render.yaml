@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: mental-wellness-journal
+    runtime: docker
+    plan: free
+    
+    # Build configuration
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    
+    # Environment variables
+    envVars:
+      - key: DB_PATH
+        value: /opt/render/project/data/mental_journal
+      - key: JAVA_OPTS
+        value: -Djava.security.egd=file:/dev/./urandom -Xms256m -Xmx512m
+    
+    # Health check endpoint
+    healthCheckPath: /
+    
+    # Auto-deploy on push
+    autoDeploy: true
+    
+    # Persistent disk for H2 database
+    disk:
+      name: mental-journal-data
+      mountPath: /opt/render/project/data
+      sizeGB: 1
+

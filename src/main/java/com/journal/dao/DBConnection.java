@@ -6,7 +6,12 @@ import java.sql.Statement;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String JDBC_URL = "jdbc:h2:file:./data/mental_journal;AUTO_SERVER=TRUE";
+    // Use environment variable for DB path if available (for Render deployment)
+    // Otherwise default to local ./data directory
+    private static final String DB_PATH = System.getenv("DB_PATH") != null 
+        ? System.getenv("DB_PATH") 
+        : "./data/mental_journal";
+    private static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH + ";AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL";
     private static final String USER = "sa";
     private static final String PASS = "";
     private static boolean driverLoaded = false;
@@ -91,7 +96,7 @@ public class DBConnection {
                 );
                 """);
             
-            System.out.println("Database tables created/verified successfully");
+            System.out.println("Database tables created/verified successfully at: " + DB_PATH);
         } catch (SQLException ex) {
             System.err.println("Database initialization error: " + ex.getMessage());
             ex.printStackTrace();

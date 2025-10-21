@@ -1,4 +1,47 @@
+# Git
 .git
 .gitignore
+.gitattributes
+
+# IDEs
+.idea
+.vscode
+*.iml
+.project
+.classpath
+.settings
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+*.md
+
+# Logs
 *.log
-data/
+logs
+
+# Maven (keep target/MentalJournalApp.war)
+target/classes
+target/test-classes
+target/generated-sources
+target/generated-test-sources
+target/maven-status
+target/maven-archiver
+target/MentalJournalApp
+
+# Source code (not needed in Docker image, only WAR)
+src
+
+# Build files
+pom.xml
+
+# Temporary
+tmp
+temp
+*.tmp
+
+# Frontend duplicate
+frontend

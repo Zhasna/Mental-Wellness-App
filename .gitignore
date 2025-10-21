@@ -1,5 +1,6 @@
 # Maven
-#/target/
+/target/*
+!target/MentalJournalApp.war
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -60,9 +61,10 @@ secrets.json
 
 # Generated/exploded WAR or duplicates
 /src/MentalJournalApp/
-#/MentalJournalApp.war
-#*.war
+/MentalJournalApp.war
 *.ear
+# Allow the WAR in target/ for deployment
+!target/MentalJournalApp.war
 *.jar
 !maven-wrapper.jar
 /frontend/
