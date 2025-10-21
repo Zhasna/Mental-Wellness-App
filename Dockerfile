@@ -25,6 +25,10 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:8080/ || exit 1
 
-# Start Tomcat
-CMD ["catalina.sh", "run"]
+# Copy startup script
+COPY startup.sh /usr/local/tomcat/startup.sh
+RUN chmod +x /usr/local/tomcat/startup.sh
+
+# Start with custom script
+CMD ["/usr/local/tomcat/startup.sh"]
 

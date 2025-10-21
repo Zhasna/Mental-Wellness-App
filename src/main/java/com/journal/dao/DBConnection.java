@@ -11,7 +11,7 @@ public class DBConnection {
     private static final String DB_PATH = System.getenv("DB_PATH") != null 
         ? System.getenv("DB_PATH") 
         : "./data/mental_journal";
-    private static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH + ";AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL";
+    private static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH + ";AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE";
     private static final String USER = "sa";
     private static final String PASS = "";
     private static boolean driverLoaded = false;
@@ -36,6 +36,9 @@ public class DBConnection {
             System.err.println("Cannot initialize database - H2 driver not loaded");
             return;
         }
+        
+        System.out.println("Initializing database at: " + DB_PATH);
+        System.out.println("JDBC URL: " + JDBC_URL);
         
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
             // users table
