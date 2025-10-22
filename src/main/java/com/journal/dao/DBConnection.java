@@ -25,7 +25,7 @@ public class DBConnection {
         }
         System.out.println("==============================");
     }
-    private static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH + ";AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE";
+    private static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH + ";AUTO_SERVER=TRUE;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE;AUTO_SERVER_PORT=9090";
     private static final String USER = "sa";
     private static final String PASS = "";
     private static boolean driverLoaded = false;
@@ -52,8 +52,22 @@ public class DBConnection {
             return;
         }
         
-        System.out.println("Initializing database at: " + DB_PATH);
+        System.out.println("=== INITIALIZING DATABASE ===");
+        System.out.println("DB_PATH: " + DB_PATH);
         System.out.println("JDBC URL: " + JDBC_URL);
+        
+        // Check if the directory exists and is writable
+        java.io.File dbDir = new java.io.File(DB_PATH).getParentFile();
+        System.out.println("Database directory: " + dbDir.getAbsolutePath());
+        System.out.println("Directory exists: " + dbDir.exists());
+        System.out.println("Directory is writable: " + dbDir.canWrite());
+        
+        // Try to create directory if it doesn't exist
+        if (!dbDir.exists()) {
+            System.out.println("Creating database directory...");
+            boolean created = dbDir.mkdirs();
+            System.out.println("Directory created: " + created);
+        }
         
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
             // users table
@@ -114,9 +128,34 @@ public class DBConnection {
                 );
                 """);
             
-            System.out.println("Database tables created/verified successfully at: " + DB_PATH);
+            System.out.println("✓ Database tables created/verified successfully");
+            
+            // Verify database files are created
+            java.io.File dbFile = new java.io.File(DB_PATH + ".mv.db");
+            System.out.println("Database file path: " + dbFile.getAbsolutePath());
+            System.out.println("Database file exists: " + dbFile.exists());
+            if (dbFile.exists()) {
+                System.out.println("Database file size: " + dbFile.length() + " bytes");
+                System.out.println("Database file last modified: " + new java.util.Date(dbFile.lastModified()));
+            }
+            
+            // List all files in the data directory
+            java.io.File dataDir = new java.io.File(DB_PATH).getParentFile();
+            if (dataDir.exists() && dataDir.isDirectory()) {
+                System.out.println("Files in data directory:");
+                java.io.File[] files = dataDir.listFiles();
+                if (files != null && files.length > 0) {
+                    for (java.io.File f : files) {
+                        System.out.println("  - " + f.getName() + " (" + f.length() + " bytes)");
+                    }
+                } else {
+                    System.out.println("  (directory is empty)");
+                }
+            }
+            
+            System.out.println("==============================");
         } catch (SQLException ex) {
-            System.err.println("Database initialization error: " + ex.getMessage());
+            System.err.println("✗ Database initialization error: " + ex.getMessage());
             ex.printStackTrace();
         }
     }

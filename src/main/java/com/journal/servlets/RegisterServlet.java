@@ -65,14 +65,42 @@ public class RegisterServlet extends HttpServlet {
 
             String sql = "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)";
             try (Connection conn = DBConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                
+                System.out.println("Inserting user into database...");
                 ps.setString(1, username);
                 ps.setString(2, email);
                 ps.setString(3, hashedPassword);
 
                 int rowsAffected = ps.executeUpdate();
+                System.out.println("Rows affected: " + rowsAffected);
+                
                 if (rowsAffected > 0) {
-                    System.out.println("✓ User registered successfully: " + email);
+                    // Get the generated user ID
+                    var rs = ps.getGeneratedKeys();
+                    if (rs.next()) {
+                        long userId = rs.getLong(1);
+                        System.out.println("✓ User registered successfully - ID: " + userId + ", Email: " + email);
+                    } else {
+                        System.out.println("✓ User registered successfully: " + email);
+                    }
+                    
+                    // Force commit (H2 should auto-commit by default, but let's be explicit)
+                    if (!conn.getAutoCommit()) {
+                        conn.commit();
+                        System.out.println("Transaction committed");
+                    }
+                    
+                    // Verify the user was actually inserted by querying
+                    try (PreparedStatement verifyPs = conn.prepareStatement("SELECT COUNT(*) FROM users WHERE email = ?")) {
+                        verifyPs.setString(1, email);
+                        var verifyRs = verifyPs.executeQuery();
+                        if (verifyRs.next()) {
+                            int count = verifyRs.getInt(1);
+                            System.out.println("Verification: Found " + count + " user(s) with email " + email);
+                        }
+                    }
+                    
                     response.getWriter().write("{\"message\":\"User registered successfully\"}");
                 } else {
                     System.err.println("✗ Registration failed - no rows affected");
