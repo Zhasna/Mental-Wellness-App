@@ -17,6 +17,8 @@ RUN mkdir -p /usr/local/tomcat/data && \
 # Set environment variables for production
 ENV CATALINA_OPTS="-Xms256m -Xmx512m"
 ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"
+# Default DB_PATH (will be overridden by Render environment variable)
+ENV DB_PATH="/opt/render/project/data/mental_journal"
 
 # Expose Tomcat port (Render will map this to PORT env variable)
 EXPOSE 8080

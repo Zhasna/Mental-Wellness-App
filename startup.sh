@@ -31,6 +31,11 @@ touch /opt/render/project/data/test_write.txt && echo "✓ Write test successful
 rm -f /opt/render/project/data/test_write.txt
 
 echo ""
+echo "Exporting DB_PATH for Java application..."
+export DB_PATH="${DB_PATH:-/opt/render/project/data/mental_journal}"
+echo "DB_PATH is now: $DB_PATH"
+
+echo ""
 echo "Starting Tomcat..."
 exec catalina.sh run
 

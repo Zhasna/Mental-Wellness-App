@@ -15,13 +15,21 @@ public class DBConnection {
         System.out.println("=== DATABASE CONFIGURATION ===");
         System.out.println("DB_PATH environment variable: " + (envPath != null ? envPath : "NOT SET"));
         
+        // Debug: Print all environment variables to see what's available
+        System.out.println("All environment variables:");
+        System.getenv().forEach((key, value) -> {
+            if (key.contains("DB") || key.contains("DATA") || key.contains("RENDER")) {
+                System.out.println("  " + key + " = " + value);
+            }
+        });
+        
         if (envPath != null && !envPath.trim().isEmpty()) {
             DB_PATH = envPath;
-            System.out.println("Using environment DB path: " + DB_PATH);
+            System.out.println("✓ Using environment DB path: " + DB_PATH);
         } else {
             DB_PATH = "./data/mental_journal";
-            System.out.println("WARNING: DB_PATH not set, using default: " + DB_PATH);
-            System.out.println("This will NOT persist on Render! Set DB_PATH environment variable.");
+            System.out.println("✗ WARNING: DB_PATH not set, using default: " + DB_PATH);
+            System.out.println("✗ This will NOT persist on Render! Database will reset on every deploy!");
         }
         System.out.println("==============================");
     }
